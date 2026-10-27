@@ -1,0 +1,6448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10ª Reunião Ordinária do CONSAD · ZPE Maranhão</title>
+  <!-- Feito a partir do template deck-relatorio do design system: o check.ps1 libera a paleta herdada com esta marca. -->
+  <meta name="zpe-template" content="deck-relatorio">
+
+  <!-- =====================================================================
+       CONFIG DA APRESENTAÇÃO
+       ---------------------------------------------------------------------
+       DATA_APRESENTACAO — linha de data da capa. Vazio oculta a linha.
+       MOSTRAR_MARCA_GOVERNO — período eleitoral: false oculta a marca
+       "Governo do Maranhão". Override por URL: ?governo=off / ?governo=on
+       (a URL tem prioridade sobre a constante).
+       A agenda da Missão China (o que entra no roteiro e nas contagens)
+       fica em AGENDA, no script do fim do arquivo.
+       ===================================================================== -->
+  <script>
+    const DATA_APRESENTACAO = '29 de outubro de 2026 · 10h30 · reunião on-line';
+    const MOSTRAR_MARCA_GOVERNO = false;
+
+    (function () {
+      var mostrar = MOSTRAR_MARCA_GOVERNO;
+      var q = new URLSearchParams(location.search).get('governo');
+      if (q !== null) {
+        mostrar = !['0', 'off', 'nao', 'não', 'no', 'false'].includes(q.toLowerCase());
+      }
+      document.documentElement.classList.toggle('hide-gov', !mostrar);
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ===========================================================
+       FIXED 16:9 STAGE — base mandatória
+       Slides são autorados em 1920×1080 e escalados como um todo.
+       =========================================================== */
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--stage-bg, #050b18);
+    }
+
+    /* As faixas fora do stage (inevitáveis quando a janela é mais larga
+       que 16:9 e não queremos cortar na vertical) recebem o mesmo fundo
+       do slide ativo, para lerem como continuação e não como moldura. */
+    .deck-viewport {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 50% at 12% 15%, rgba(36, 69, 130, .38) 0%, transparent 70%),
+        #0a1628;
+      transition: background 320ms var(--ease, ease);
+    }
+
+    .deck-viewport.vp-deep {
+      background:
+        radial-gradient(ellipse 55% 45% at 50% 40%, rgba(36, 69, 130, .30) 0%, transparent 72%),
+        #050b18;
+    }
+
+    .deck-viewport.vp-light {
+      background:
+        radial-gradient(ellipse 60% 50% at 16% 8%, #e9eefb 0%, transparent 64%),
+        #f4f7fc;
+    }
+
+    .deck-viewport.vp-capa {
+      background: #070f22;
+    }
+
+    .deck-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      transform-origin: 0 0;
+      background: var(--slide-bg, #0a1628);
+      /* Dissolve a emenda com a faixa lateral: sem contorno duro,
+         a borda lê como vinheta em vez de moldura. */
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .02),
+        0 0 120px 60px rgba(10, 22, 40, .55);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      display: block;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      background: var(--slide-bg, #0a1628);
+    }
+
+    .slide.active,
+    .slide.visible {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    @media print {
+
+      html,
+      body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+      }
+
+      .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+      }
+
+      .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+      }
+
+      .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      .deck-controls {
+        display: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+      }
+    }
+
+    /* ===========================================================
+       RESET
+       =========================================================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html.hide-gov .gov-brand {
+      display: none !important;
+    }
+
+    /* ===========================================================
+       TOKENS — espelhados de design_system/tokens
+       =========================================================== */
+    :root {
+      /* Azul institucional — estrutura (~70%) */
+      --blue: #244582;
+      --blue-deep: #1a3160;
+      --blue-darkest: #0f1d3a;
+      --blue-pressed: #142849;
+      --blue-soft: #dbe4f5;
+      --blue-pale: #eef2fb;
+
+      /* Verde — acento de ação (~10%, cirúrgico) */
+      --green: #4cac4b;
+      --green-deep: #3d9a3c;
+      --green-pressed: #2f7a2e;
+      --green-pale: #e4f4e3;
+
+      /* Canvas claro (~20%) */
+      --canvas: #ffffff;
+      --canvas-soft: #f9f9ff;
+      --canvas-blue: #f0f3ff;
+
+      /* Tinta / texto */
+      --ink: #1a2942;
+      --ink-soft: #46556f;
+      --ink-mute: #6b7a94;
+
+      /* Superfícies escuras */
+      --bg-dark: #050b18;
+      --bg-slide: #0a1628;
+      --card-dark: #11224a;
+      --card-dark-2: #0d1b3c;
+      --hair: rgba(255, 255, 255, .08);
+      --hair-strong: rgba(255, 255, 255, .16);
+
+      /* Texto sobre escuro */
+      --w-100: #f5f7fa;
+      --w-80: rgba(233, 239, 248, .94);
+      --w-60: rgba(214, 225, 240, .86);
+      --w-45: rgba(188, 203, 226, .78);
+      --w-30: rgba(165, 182, 210, .70);
+
+      /* Semânticos de encaminhamento */
+      --delib: #4cac4b;
+      --ciencia: #7d93c4;
+
+      /* Motion — Corporate: sem bounce */
+      --ease: cubic-bezier(.2, 0, 0, 1);
+      --ease-out: cubic-bezier(0, 0, .2, 1);
+      --ease-in: cubic-bezier(.3, 0, 1, 1);
+
+      --stage-bg: #050b18;
+      --slide-bg: #0a1628;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 20px;
+      line-height: 1.6;
+      color: var(--w-100);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===========================================================
+       GRÃO — textura obrigatória em superfície escura
+       =========================================================== */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: .06;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .grain-light::after {
+      opacity: .04;
+      mix-blend-mode: multiply;
+    }
+
+    /* ===========================================================
+       TEMAS DE SLIDE
+       =========================================================== */
+    .s-dark {
+      background:
+        radial-gradient(ellipse 70% 55% at 12% 15%, rgba(36, 69, 130, .55) 0%, transparent 68%),
+        radial-gradient(ellipse 55% 70% at 88% 85%, rgba(76, 172, 75, .10) 0%, transparent 62%),
+        var(--bg-slide);
+      color: var(--w-100);
+    }
+
+    .s-deep {
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 42%, rgba(36, 69, 130, .42) 0%, transparent 70%),
+        var(--bg-dark);
+      color: var(--w-100);
+    }
+
+    .s-light {
+      background:
+        radial-gradient(ellipse 70% 55% at 16% 6%, #e9eefb 0%, transparent 62%),
+        linear-gradient(176deg, #fbfcff 0%, #f2f5fc 100%);
+      color: var(--ink);
+    }
+
+    .s-light::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 75% 55% at 18% 8%, rgba(36, 69, 130, .05) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 50% at 85% 92%, rgba(76, 172, 75, .04) 0%, transparent 65%);
+    }
+
+    /* Mapa pontilhado como textura de fundo do slide claro.
+       Ancorado à direita e sangrando pela borda, atrás do conteúdo:
+       dá matéria ao canvas sem virar ilustração. A máscara apaga o
+       mapa sob a coluna de texto, à esquerda, para o contraste do
+       corpo continuar medindo contra o canvas puro. */
+    .s-light .lightmap {
+      position: absolute;
+      right: -12%;
+      top: 50%;
+      width: 72%;
+      transform: translateY(-50%);
+      z-index: 1;
+      opacity: .2;
+      pointer-events: none;
+      max-width: none;
+      max-height: none;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .35) 24%, #000 52%, #000 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .35) 24%, #000 52%, #000 100%);
+    }
+
+    /* ===========================================================
+       WORLD DOTTED EM SLIDES ESCUROS — textura ambiente
+       Mesma peça de marca do .lightmap, do outro lado do tema.
+       Camada ambiente (motion): nunca disputa com o conteúdo,
+       nunca entra no caminho de leitura do corpo de texto.
+
+       A animação NÃO percorre os 2.791 <path> do SVG — isso seria
+       milhares de nós animados num projetor. Em vez disso, duas
+       cópias do mesmo mapa recebem máscaras radiais que passeiam
+       em tempos e sentidos diferentes: onde as máscaras se cruzam
+       os pontinhos acendem, onde se afastam eles apagam. O efeito
+       é de pontos surgindo e sumindo, mas o custo é de duas
+       camadas compostas na GPU.
+
+       Usa world_dotted_raster.png, não o .svg: animar opacity sobre
+       o SVG obriga o navegador a rasterizar 2.791 paths a cada frame
+       e derruba a apresentação de 61 para 21 fps — medido. O PNG é
+       um bitmap achatado que a GPU compõe sem recalcular nada (e o
+       arquivo é 112 KB contra 991 KB). O raster já sai azul, então
+       também dispensa o filter caro que o .lightmap precisa.
+       Regerar com: assets/images/world_dotted.svg a 1600px de largura.
+       =========================================================== */
+    .darkmap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .darkmap span {
+      position: absolute;
+      right: -10%;
+      top: 50%;
+      width: 76%;
+      transform: translateY(-50%);
+      display: block;
+    }
+
+    .darkmap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: none;
+      max-height: none;
+    }
+
+    /* Camada base: o mapa em si, estático. Custo zero por frame. */
+    .darkmap .dm-base {
+      opacity: .085;
+      -webkit-mask-image: radial-gradient(ellipse 62% 62% at 62% 42%, #000 0%, rgba(0, 0, 0, .45) 58%, transparent 82%);
+      mask-image: radial-gradient(ellipse 62% 62% at 62% 42%, #000 0%, rgba(0, 0, 0, .45) 58%, transparent 82%);
+    }
+
+    /* As camadas de brilho NÃO carregam bitmap: são um gradiente radial
+       recortado pelo PNG do mapa usado como máscara. O que anima é um
+       gradiente — a GPU resolve sem repintar imagem alguma, e a
+       apresentação fica em 60fps. (Animar uma cópia do mapa como <img>
+       custava ~10fps por camada: medido.)
+
+       Períodos primos entre si (19s e 23s) fazem o padrão combinado só
+       se repetir a cada ~7min, então não se percebe um ciclo. Sine
+       ease-in-out mantém o laço sem costura. */
+    /* O brilho é um gradiente PEQUENO que passeia sobre o mapa estático.
+
+       Anima só transform e opacity, as duas propriedades que a GPU
+       resolve sem repintar. Medido com GPU real: 180fps com o mapa
+       contra 176fps sem ele — o efeito sai de graça.
+
+       (Atenção ao medir: em headless o Chromium rasteriza por software
+       e acusa 20-45fps aqui. É artefato do SwiftShader, não da máquina
+       de apresentação. Meça com headless:false.) */
+    .darkmap .dm-glow {
+      position: absolute;
+      top: 50%;
+      width: 34%;
+      aspect-ratio: 1 / 1;
+      display: block;
+      opacity: 0;
+      will-change: opacity, transform;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(233, 239, 248, .42) 0%, rgba(233, 239, 248, .16) 42%, transparent 72%);
+    }
+
+    .darkmap .dm-glow-a {
+      right: 8%;
+      animation: dmDriftA 19s cubic-bezier(.37, 0, .63, 1) infinite;
+    }
+
+    .darkmap .dm-glow-b {
+      right: 38%;
+      animation: dmDriftB 23s cubic-bezier(.37, 0, .63, 1) infinite;
+    }
+
+    /* Só transform e opacity — as duas propriedades que a GPU resolve
+       sem repintar. Percursos e ritmos diferentes para as duas elipses
+       nunca coincidirem. */
+    @keyframes dmDriftA {
+      0% { opacity: 0; transform: translate(0, -50%); }
+      26% { opacity: .5; }
+      50% { opacity: .62; transform: translate(-64%, -78%); }
+      76% { opacity: .42; }
+      100% { opacity: 0; transform: translate(0, -50%); }
+    }
+
+    @keyframes dmDriftB {
+      0% { opacity: 0; transform: translate(0, -34%); }
+      30% { opacity: .38; }
+      58% { opacity: .5; transform: translate(58%, -6%); }
+      82% { opacity: .3; }
+      100% { opacity: 0; transform: translate(0, -34%); }
+    }
+
+    /* Grades de largura cheia: o mapa desce e sangra pela base, para
+       não passar entre as colunas de cards. */
+    /* Só a camada base muda de enquadramento. O brilho mantém o tamanho
+       pequeno — esticá-lo junto devolvia o custo de área e derrubava
+       estes slides para ~18fps. */
+    .darkmap.darkmap-wide .dm-base {
+      right: -24%;
+      top: auto;
+      bottom: -38%;
+      width: 92%;
+      transform: none;
+    }
+
+    .darkmap.darkmap-wide .dm-glow {
+      top: auto;
+      bottom: 4%;
+    }
+
+    .darkmap.darkmap-wide .dm-base {
+      opacity: .07;
+      -webkit-mask-image: radial-gradient(ellipse 56% 56% at 46% 32%, #000 0%, rgba(0, 0, 0, .3) 54%, transparent 76%);
+      mask-image: radial-gradient(ellipse 56% 56% at 46% 32%, #000 0%, rgba(0, 0, 0, .3) 54%, transparent 76%);
+    }
+
+    .darkmap.darkmap-wide .dm-glow-a { animation-name: dmDriftWideA; }
+    .darkmap.darkmap-wide .dm-glow-b { animation-name: dmDriftWideB; }
+
+    /* Ancoradas na base: aqui o mapa sangra por baixo, então o brilho
+       passeia rente ao rodapé em vez de no miolo. */
+    @keyframes dmDriftWideA {
+      0% { opacity: 0; transform: translate(0, 0); }
+      26% { opacity: .44; }
+      50% { opacity: .55; transform: translate(-58%, -46%); }
+      76% { opacity: .36; }
+      100% { opacity: 0; transform: translate(0, 0); }
+    }
+
+    @keyframes dmDriftWideB {
+      0% { opacity: 0; transform: translate(0, -14%); }
+      30% { opacity: .34; }
+      58% { opacity: .46; transform: translate(52%, 10%); }
+      82% { opacity: .26; }
+      100% { opacity: 0; transform: translate(0, -14%); }
+    }
+
+    /* Só anima no slide visível: 8 mapas pulsando fora da tela
+       consumiriam GPU durante a reunião inteira. */
+    .darkmap .dm-glow {
+      animation-play-state: paused;
+    }
+
+    .slide.active .darkmap .dm-glow {
+      animation-play-state: running;
+    }
+
+    /* O brilho anima mesmo com prefers-reduced-motion, como os vídeos
+       (ver sincronizarVideos). Parado ele vira uma mancha sobre o texto,
+       e apagado o mapa some. A regra global de reduced-motion encurta
+       toda animação para 0.01ms com !important; estes seletores são
+       mais específicos e devolvem a duração. */
+    @media (prefers-reduced-motion: reduce) {
+      .darkmap .dm-glow-a { animation-duration: 19s !important; }
+      .darkmap .dm-glow-b { animation-duration: 23s !important; }
+    }
+
+    /* O SVG é escuro na origem; o filtro o leva ao azul institucional
+       em baixíssima densidade, mantendo-o como textura e não como figura. */
+    .s-light .lightmap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: brightness(0) saturate(100%) invert(22%) sepia(38%) saturate(1560%) hue-rotate(196deg) brightness(93%) contrast(89%);
+    }
+
+    /* Variante: grades que ocupam toda a largura. O mapa desce até
+       sangrar pela base e só o quadrante superior direito permanece
+       visível — atrás do título, nunca entre as colunas de cards. */
+    .s-light .lightmap.lightmap-wide {
+      right: -26%;
+      top: auto;
+      bottom: -34%;
+      width: 88%;
+      opacity: .16;
+      transform: none;
+      -webkit-mask-image: radial-gradient(ellipse 58% 58% at 46% 34%, #000 0%, rgba(0, 0, 0, .3) 56%, transparent 78%);
+      mask-image: radial-gradient(ellipse 58% 58% at 46% 34%, #000 0%, rgba(0, 0, 0, .3) 56%, transparent 78%);
+    }
+
+    /* Dot grid decorativo */
+    .dots::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, .05) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* Conteúdo sempre acima das camadas decorativas */
+    .slide>.pad {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      /* Zona segura vertical: como o stage escala pela largura, janelas
+         mais largas que 16:9 transbordam ~60px no topo e na base. O
+         padding vertical cobre essa zona para nada ser cortado. */
+      padding: 150px 168px 190px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* O cabeçalho fica no topo; o bloco de conteúdo ocupa a folga
+       restante e se centraliza dentro dela. Evita o "conteúdo
+       flutuando no meio da tela" e mantém os títulos alinhados
+       entre slides. */
+    .slide>.pad>.eyebrow,
+    .slide>.pad>.title,
+    .slide>.pad>.lede {
+      flex: none;
+    }
+
+    .slide>.pad>.body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ===========================================================
+       TIPOGRAFIA
+       =========================================================== */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--green);
+      display: block;
+    }
+
+    .s-light .eyebrow {
+      /* token de verde escurecido: 14px exige 4.5:1 sobre canvas claro */
+      color: #24651f;
+    }
+
+    h1.title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 68px;
+      line-height: 1.06;
+      letter-spacing: -.025em;
+    }
+
+    h2.title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 56px;
+      line-height: 1.1;
+      letter-spacing: -.022em;
+    }
+
+    .title-light {
+      font-weight: 300;
+    }
+
+    .lede {
+      font-size: 23px;
+      line-height: 1.6;
+      color: var(--w-80);
+      max-width: 62ch;
+    }
+
+    .s-light .lede {
+      color: var(--ink-soft);
+    }
+
+    .num {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      letter-spacing: -.035em;
+      line-height: .95;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .green-rule {
+      width: 64px;
+      height: 3px;
+      background: var(--green);
+      border-radius: 2px;
+    }
+
+    /* ===========================================================
+       ANIMAÇÃO — reveal por stagger
+       Corporate: 0.5s, ease-out, sem overshoot. Budget < 500ms.
+       =========================================================== */
+    .anim {
+      opacity: 0;
+    }
+
+    .slide.active .anim {
+      animation: riseIn .52s var(--ease-out) forwards;
+    }
+
+    .slide.active .d1 {
+      animation-delay: 60ms;
+    }
+
+    .slide.active .d2 {
+      animation-delay: 140ms;
+    }
+
+    .slide.active .d3 {
+      animation-delay: 220ms;
+    }
+
+    .slide.active .d4 {
+      animation-delay: 300ms;
+    }
+
+    .slide.active .d5 {
+      animation-delay: 380ms;
+    }
+
+    .slide.active .d6 {
+      animation-delay: 460ms;
+    }
+
+    .slide.active .d7 {
+      animation-delay: 540ms;
+    }
+
+    .slide.active .d8 {
+      animation-delay: 620ms;
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide.active .fade {
+      animation: fadeIn .7s var(--ease-out) forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Transição entre slides */
+    .slide.s-exit {
+      animation: sExit 300ms var(--ease-in) forwards;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .slide.s-enter {
+      animation: sEnter 440ms var(--ease-out) 90ms forwards;
+      z-index: 2;
+    }
+
+    @keyframes sExit {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(-36px);
+      }
+    }
+
+    @keyframes sEnter {
+      from {
+        opacity: 0;
+        transform: translateX(36px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    /* ===========================================================
+       CAPA
+       =========================================================== */
+    .capa {
+      background: #070f22;
+    }
+
+    .capa-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .capa-bg img,
+    .capa-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-width: none;
+      max-height: none;
+    }
+
+    /* Video da capa: o <img> fica embaixo como poster/fallback. O vídeo cobre
+       quando carrega; se falhar, some e sobra a imagem — o próprio pôster
+       do vídeo, para a capa nunca ficar sem o globo. */
+    .capa-video {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 520ms cubic-bezier(.2, 0, 0, 1);
+    }
+
+    .capa-video.is-playing {
+      opacity: 1;
+    }
+
+    .capa-video-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .capa-veil {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(105deg,
+          rgba(7, 15, 34, .94) 0%,
+          rgba(7, 15, 34, .90) 30%,
+          rgba(7, 15, 34, .62) 48%,
+          rgba(7, 15, 34, .16) 66%,
+          rgba(7, 15, 34, 0) 82%),
+        /* Protege os logos no rodapé esquerdo sem escurecer a base do globo */
+        linear-gradient(0deg, rgba(7, 15, 34, .85) 0%, transparent 42%)
+          left / 58% 100% no-repeat;
+    }
+
+    /* Emenda suave entre a faixa protegida e o vídeo limpo à direita */
+    .capa-veil::after {
+      content: '';
+      position: absolute;
+      left: 58%;
+      bottom: 0;
+      width: 22%;
+      height: 42%;
+      background: linear-gradient(0deg, rgba(7, 15, 34, .85) 0%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 0%, transparent 100%);
+    }
+
+    .capa-world {
+      position: absolute;
+      right: -6%;
+      top: 12%;
+      width: 62%;
+      opacity: .13;
+      z-index: 2;
+      pointer-events: none;
+      max-width: none;
+      max-height: none;
+    }
+
+    .capa-inner {
+      position: relative;
+      z-index: 4;
+      height: 100%;
+      padding: 150px 168px 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1180px;
+    }
+
+    .capa-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 34px;
+    }
+
+    .capa-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 82px;
+      line-height: 1.04;
+      letter-spacing: -.028em;
+      color: var(--w-100);
+    }
+
+    .capa-title strong {
+      font-weight: 600;
+      display: block;
+    }
+
+    .capa-rule {
+      width: 88px;
+      height: 3px;
+      background: var(--green);
+      border-radius: 2px;
+      margin: 40px 0 34px;
+    }
+
+    .capa-orgs {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 27px;
+      font-weight: 400;
+      color: var(--w-80);
+      letter-spacing: .01em;
+    }
+
+    .capa-orgs i {
+      width: 1px;
+      height: 26px;
+      background: var(--hair-strong);
+      font-style: normal;
+    }
+
+    .capa-date {
+      margin-top: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      letter-spacing: .1em;
+      color: var(--w-45);
+    }
+
+    .capa-logos {
+      position: absolute;
+      left: 168px;
+      bottom: 150px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .capa-logos img {
+      height: 54px;
+      width: auto;
+      opacity: .95;
+    }
+
+    .capa-logos .sep {
+      width: 1px;
+      height: 40px;
+      background: var(--hair-strong);
+    }
+
+    /* ===========================================================
+       DIVISOR DE SEÇÃO
+       =========================================================== */
+    .div-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      padding: 0 168px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .div-index {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 300px;
+      line-height: .8;
+      letter-spacing: -.05em;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(255, 255, 255, .17);
+      position: absolute;
+      right: 168px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      user-select: none;
+    }
+
+    .div-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 30px;
+    }
+
+    .div-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 76px;
+      line-height: 1.06;
+      letter-spacing: -.028em;
+      max-width: 17ch;
+    }
+
+    .div-title strong {
+      font-weight: 600;
+    }
+
+    .div-meta {
+      margin-top: 44px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Selo de encaminhamento */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 40px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tag-delib {
+      background: rgba(76, 172, 75, .14);
+      border: 1px solid rgba(76, 172, 75, .45);
+      color: #7ed07d;
+    }
+
+    .tag-ciencia {
+      background: rgba(125, 147, 196, .12);
+      border: 1px solid rgba(125, 147, 196, .38);
+      color: #a9bbe0;
+    }
+
+    .s-light .tag-delib {
+      background: var(--green-pale);
+      border-color: rgba(61, 154, 60, .4);
+      color: var(--green-pressed);
+    }
+
+    .s-light .tag-ciencia {
+      background: var(--blue-pale);
+      border-color: rgba(36, 69, 130, .25);
+      color: var(--blue);
+    }
+
+    .tag::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex: none;
+    }
+
+    /* ===========================================================
+       LINK DE DOCUMENTO
+       =========================================================== */
+    /* Botão sólido: verde da marca com brilho azul ascendente pela base.
+       É o único elemento verde-preenchido do deck — por isso lê como
+       "clicável" à distância, sem competir com título ou número. */
+    .doclink {
+      position: relative;
+      isolation: isolate;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 46px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(134, 226, 133, .55);
+      background:
+        radial-gradient(ellipse 70% 130% at 50% 118%, rgba(60, 178, 190, .9) 0%, rgba(47, 122, 46, 0) 62%),
+        linear-gradient(168deg, #4cac4b 0%, #3d9a3c 58%, #2f7a2e 100%);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .22) inset,
+        0 6px 18px -6px rgba(76, 172, 75, .55),
+        0 2px 6px -2px rgba(15, 29, 58, .5);
+      transition:
+        transform .26s var(--ease),
+        box-shadow .26s var(--ease),
+        border-color .26s var(--ease);
+    }
+
+    /* Brilho interno: intensifica o mesmo foco teal que já existe na
+       base do botão, em vez de acender um halo à parte. Fica dentro
+       dos limites — inset 0, não -1px. */
+    .doclink::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: radial-gradient(ellipse 62% 125% at 50% 120%, rgba(76, 205, 200, .6) 0%, transparent 68%);
+      opacity: 0;
+      transition: opacity .26s var(--ease);
+    }
+
+    /* Varredura de luz — anima background-position, não transform.
+       O fundo só é pintado dentro da caixa do elemento, então a luz
+       nasce e morre dentro da pílula em vez de entrar e sair por fora
+       (era o que acontecia com translateX de -120% a 120%). */
+    .doclink::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background-image: linear-gradient(100deg, transparent 34%, rgba(255, 255, 255, .3) 50%, transparent 66%);
+      background-repeat: no-repeat;
+      background-size: 220% 100%;
+      background-position: 150% 0;
+      opacity: 0;
+    }
+
+    /* O realce do hover fica na borda e na sombra projetada para
+       baixo — nada de anel externo, que lia como brilho "solto"
+       em volta do botão. */
+    .doclink:hover,
+    .doclink:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(168, 240, 167, .85);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .3) inset,
+        0 0 12px -2px rgba(76, 205, 200, .45) inset,
+        0 12px 30px -8px rgba(76, 172, 75, .7),
+        0 4px 10px -3px rgba(15, 29, 58, .55);
+    }
+
+    .doclink:hover::before,
+    .doclink:focus-visible::before {
+      opacity: 1;
+    }
+
+    .doclink:hover::after,
+    .doclink:focus-visible::after {
+      animation: doclinkSweep .72s var(--ease) forwards;
+    }
+
+    .doclink:active {
+      transform: translateY(0);
+      transition-duration: .08s;
+    }
+
+    /* Abre e fecha em opacidade para a luz não surgir nem sumir
+       cortada contra a borda da pílula. */
+    @keyframes doclinkSweep {
+      0% {
+        background-position: 150% 0;
+        opacity: 0;
+      }
+
+      18% {
+        opacity: 1;
+      }
+
+      82% {
+        opacity: 1;
+      }
+
+      100% {
+        background-position: -50% 0;
+        opacity: 0;
+      }
+    }
+
+    .doclink svg {
+      width: 15px;
+      height: 15px;
+      flex: none;
+      transition: transform .26s var(--ease);
+    }
+
+    .doclink:hover svg,
+    .doclink:focus-visible svg {
+      transform: translate(3px, -3px);
+    }
+
+    /* Sobre canvas claro o verde precisa escurecer para manter 4.5:1
+       com o texto branco; o brilho azul recua para não lavar a base. */
+    .s-light .doclink {
+      border-color: rgba(47, 122, 46, .55);
+      background:
+        radial-gradient(ellipse 70% 130% at 50% 118%, rgba(43, 140, 150, .85) 0%, rgba(47, 122, 46, 0) 62%),
+        linear-gradient(168deg, #3d9a3c 0%, #34862f 58%, #2a6f28 100%);
+      color: #fff;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .24) inset,
+        0 6px 18px -6px rgba(47, 122, 46, .38),
+        0 2px 6px -2px rgba(36, 69, 130, .18);
+    }
+
+    .s-light .doclink:hover,
+    .s-light .doclink:focus-visible {
+      border-color: rgba(47, 122, 46, .8);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .3) inset,
+        0 12px 30px -8px rgba(47, 122, 46, .5),
+        0 0 0 1px rgba(43, 140, 150, .3),
+        0 4px 10px -3px rgba(36, 69, 130, .22);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .doclink,
+      .doclink svg {
+        transition-duration: .01ms;
+      }
+
+      .doclink:hover,
+      .doclink:focus-visible {
+        transform: none;
+      }
+
+      .doclink:hover::after,
+      .doclink:focus-visible::after {
+        animation: none;
+      }
+    }
+
+    /* Rodapé de slide */
+    .foot {
+      position: absolute;
+      left: 168px;
+      right: 168px;
+      /* dentro da zona segura vertical, acima da faixa do HUD */
+      bottom: 138px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .foot-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--w-45);
+    }
+
+    .s-light .foot-note {
+      color: var(--ink-mute);
+    }
+
+    /* ===========================================================
+       PAUTA
+       =========================================================== */
+    .pauta-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 52px;
+    }
+
+    .pauta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--hair);
+    }
+
+    .pauta-row {
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      align-items: center;
+      gap: 32px;
+      padding: 26px 8px 26px 22px;
+      border-bottom: 1px solid var(--hair);
+      position: relative;
+      /* hover desliza via transform (não layout) — evita thrash */
+      transition: background .24s var(--ease);
+    }
+
+    .pauta-row>* {
+      transition: transform .24s var(--ease);
+    }
+
+    .pauta-row:hover>* {
+      transform: translateX(10px);
+    }
+
+    .pauta-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--green);
+      transform: scaleY(0);
+      transform-origin: 50% 50%;
+      transition: transform .3s var(--ease);
+    }
+
+    .pauta-row:hover {
+      background: rgba(255, 255, 255, .03);
+      padding-left: 22px;
+    }
+
+    .pauta-row:hover::before {
+      transform: scaleY(1);
+    }
+
+    .pauta-n {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: var(--w-30);
+      font-variant-numeric: tabular-nums;
+      transition: color .24s var(--ease);
+    }
+
+    .pauta-row:hover .pauta-n {
+      color: var(--green);
+    }
+
+    .pauta-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 32px;
+      letter-spacing: -.012em;
+      color: var(--w-100);
+      line-height: 1.2;
+    }
+
+    .pauta-t small {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--w-45);
+      letter-spacing: 0;
+      margin-top: 5px;
+    }
+
+    /* ===========================================================
+       VÍDEO DE ATMOSFERA — aberturas de capítulo
+       (mesmo tratamento do encaminhamento no deck do CONSAD)
+       =========================================================== */
+    /* Vídeo de fundo do encaminhamento: plano em perspectiva com o lote
+       destacado. Ancorado embaixo (é onde a malha vive) e dissolvido para
+       cima, para não competir com a matéria posta em votação. */
+    .enc-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .enc-bg .slide-video,
+    .enc-bg .enc-bg-fallback {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 118%;
+      height: 58%;
+      /* desloca o lote verde para fora do eixo do botão, que também é verde */
+      transform: translateX(-42%);
+      object-fit: cover;
+      object-position: center bottom;
+      max-width: none;
+      max-height: none;
+      /* dissolve no topo e nas laterais — sem borda visível de vídeo */
+      -webkit-mask-image:
+        linear-gradient(0deg, #000 0%, #000 22%, transparent 88%),
+        linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+      mask-image:
+        linear-gradient(0deg, #000 0%, #000 22%, transparent 88%),
+        linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .enc-bg .slide-video {
+      opacity: 0;
+      transition: opacity 520ms cubic-bezier(.2, 0, 0, 1);
+    }
+
+    /* Atmosfera, não assunto: a matéria em votação é que tem de dominar */
+    .enc-bg .slide-video.is-playing {
+      opacity: .34;
+    }
+
+    .enc-bg-fallback {
+      opacity: .28;
+    }
+
+    /* Assenta o vídeo no azul do slide em vez de deixá-lo flutuar por cima */
+    .enc-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 80% at 50% 100%, transparent 30%, rgba(5, 11, 24, .55) 100%);
+    }
+
+
+    /* Painel de destaque — a ZPE não é proprietária */
+    .claim {
+      background: linear-gradient(168deg, rgba(36, 69, 130, .55) 0%, rgba(13, 27, 60, .9) 100%);
+      border: 1px solid rgba(76, 172, 75, .3);
+      border-radius: 20px;
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .claim::after {
+      content: '';
+      position: absolute;
+      right: -60px;
+      bottom: -70px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(76, 172, 75, .18) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    .claim-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+
+    .claim-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 36px;
+      line-height: 1.22;
+      letter-spacing: -.02em;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+
+    .claim-t strong {
+      font-weight: 600;
+    }
+
+    .claim-d {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--w-60);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Cláusulas essenciais — chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      letter-spacing: .04em;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid var(--hair);
+      color: var(--w-60);
+      transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+    }
+
+    .chip:hover {
+      border-color: rgba(76, 172, 75, .5);
+      color: #a8dda7;
+      background: rgba(76, 172, 75, .08);
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid var(--hair);
+      border-radius: 18px;
+      padding: 30px 32px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Conteúdo do painel distribuído: evita o bloco final colado
+       na base com um vão no meio. */
+    .panel>.panel-l {
+      flex: none;
+    }
+
+    .panel>.prazo,
+    .panel>.esc,
+    .panel>div:last-child {
+      flex: none;
+    }
+
+    .panel {
+      justify-content: space-evenly;
+    }
+
+    .panel-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      margin-bottom: 22px;
+    }
+
+    /* Linha de dados inline */
+    .kv {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .kv:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .kv-ico {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid var(--hair);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      flex: none;
+    }
+
+    .kv-ico svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .kv-t {
+      font-size: 17px;
+      color: var(--w-80);
+      line-height: 1.45;
+    }
+
+    .kv-t b {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       SETORES ESTRATÉGICOS
+       =========================================================== */
+    .setores {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 4px;
+    }
+
+    .setor {
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid var(--hair);
+      border-radius: 16px;
+      padding: 26px 26px 24px;
+      transition: border-color .26s var(--ease), background .26s var(--ease), transform .26s var(--ease);
+    }
+
+    .setor:hover {
+      border-color: rgba(76, 172, 75, .45);
+      background: rgba(76, 172, 75, .05);
+      transform: translateY(-3px);
+    }
+
+    .setor-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .setor-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 23px;
+      line-height: 1.22;
+      color: var(--w-100);
+      margin-bottom: 9px;
+    }
+
+    .setor-d {
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: var(--w-60);
+    }
+
+    /* ===========================================================
+       NÚMEROS-CHAVE
+       =========================================================== */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 4px;
+    }
+
+    .kpi {
+      border-radius: 18px;
+      padding: 30px 28px 28px;
+      border: 1px solid var(--hair);
+      background: linear-gradient(168deg, rgba(36, 69, 130, .32) 0%, rgba(13, 27, 60, .72) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      margin-bottom: 16px;
+    }
+
+    .kpi-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+    }
+
+    .kpi-v em {
+      font-style: normal;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--green);
+      letter-spacing: 0;
+    }
+
+    .kpi-v small {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--w-60);
+      letter-spacing: -.01em;
+    }
+
+    .kpi-d {
+      margin-top: 13px;
+      font-size: 15.5px;
+      line-height: 1.5;
+      color: var(--w-60);
+    }
+
+    /* ===========================================================
+       ENCERRAMENTO
+       =========================================================== */
+    .end-inner {
+      position: relative;
+      z-index: 4;
+      height: 100%;
+      padding: 150px 168px 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .end-sint {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin: 40px 0 44px;
+      max-width: 1080px;
+    }
+
+    .end-card {
+      border-radius: 18px;
+      padding: 28px 30px;
+      border: 1px solid var(--hair);
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .end-card.delib {
+      border-color: rgba(76, 172, 75, .38);
+      background: linear-gradient(168deg, rgba(76, 172, 75, .11) 0%, rgba(76, 172, 75, .03) 100%);
+    }
+
+    .end-card-h {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .end-card-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      color: #fff;
+    }
+
+    .end-items {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .end-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 16.5px;
+      color: var(--w-80);
+      line-height: 1.4;
+    }
+
+    .end-item i {
+      font-family: 'Barlow', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--green);
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(76, 172, 75, .14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+    }
+
+    .end-card:not(.delib) .end-item i {
+      color: #a9bbe0;
+      background: rgba(125, 147, 196, .14);
+    }
+
+    .end-thanks {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 42px;
+      line-height: 1.16;
+      letter-spacing: -.024em;
+      color: #fff;
+    }
+
+    .end-thanks strong {
+      font-weight: 600;
+    }
+
+    /* Foco de teclado — anel verde da marca, visível em qualquer superfície */
+    :focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* ===========================================================
+       TEMA CLARO — overrides completos
+       Canvas claro como respiro entre blocos escuros (ritmo do
+       design system). Azul é a tinta; verde permanece acento.
+       =========================================================== */
+    .s-light .title,
+    .s-light h1.title,
+    .s-light h2.title {
+      color: var(--blue);
+    }
+
+    .s-light .title strong,
+    .s-light h1.title strong,
+    .s-light h2.title strong,
+    .s-light .title span {
+      color: var(--blue-deep);
+    }
+
+    /* Rodapé sobre canvas claro precisa de tinta, não de cinza */
+    .s-light .foot .foot-note,
+    .s-light .foot-note {
+      color: #4a5a76;
+    }
+
+
+    /* ===========================================================
+       ============  COMPONENTES DO RELATÓRIO GERENCIAL  ===========
+       Tudo abaixo é específico deste deck. A base acima (stage,
+       tokens, temas, grão, mapas, tipografia, capa, chrome) é a
+       mesma do deck do CONSAD, copiada sem alteração.
+       =========================================================== */
+
+    button.doclink {
+      cursor: pointer;
+    }
+
+    /* ===========================================================
+       ROTEIRO — pauta em duas colunas, com o volume de cada capítulo
+       =========================================================== */
+    .rot {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 64px;
+    }
+
+    .rot .pauta-list {
+      justify-content: space-evenly;
+    }
+
+    .rot .pauta-row {
+      grid-template-columns: 70px 1fr auto;
+      gap: 24px;
+      padding: 22px 8px 22px 18px;
+    }
+
+    .rot .pauta-n {
+      font-size: 38px;
+    }
+
+    .rot .pauta-t {
+      font-size: 27px;
+    }
+
+    .rot .pauta-t small {
+      font-size: 15.5px;
+    }
+
+    .rot-c {
+      text-align: right;
+      line-height: 1;
+      min-width: 92px;
+    }
+
+    .rot-c b {
+      display: block;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 36px;
+      letter-spacing: -.02em;
+      color: var(--w-100);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .rot-c span {
+      display: block;
+      margin-top: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    /* ===========================================================
+       ABERTURA DE CAPÍTULO — uma por diretoria
+       Fundo do encaminhamento do CONSAD (plano em perspectiva com o
+       lote aceso). O número que domina é o volume de entregáveis:
+       branco, Barlow 300 — nunca verde sobre o azul.
+       =========================================================== */
+    .chap {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      padding: 150px 168px 190px;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
+
+    .chap-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 72px;
+      line-height: 1.05;
+      letter-spacing: -.028em;
+      color: var(--w-100);
+      max-width: 22ch;
+      text-wrap: balance;
+    }
+
+    .chap-title strong {
+      font-weight: 600;
+    }
+
+    .chap-lede {
+      margin-top: 34px;
+      font-size: 23px;
+      line-height: 1.6;
+      color: var(--w-80);
+      max-width: 50ch;
+    }
+
+    .chap-lede b {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .chap-team {
+      margin-top: 44px;
+      padding-top: 26px;
+      border-top: 1px solid var(--hair);
+      display: flex;
+      align-items: baseline;
+      gap: 26px;
+      max-width: 1000px;
+    }
+
+    .chap-k {
+      flex: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    .chap-names {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 1.5;
+      color: var(--w-80);
+    }
+
+    .chap-names i {
+      font-style: normal;
+      color: var(--green);
+      margin: 0 12px;
+    }
+
+    .chap-r {
+      border-left: 1px solid var(--hair-strong);
+      padding-left: 64px;
+    }
+
+    .chap-n {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 236px;
+      line-height: .8;
+      letter-spacing: -.055em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chap-nl {
+      margin-top: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .chap-split {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chap-split div {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--hair);
+    }
+
+    .chap-split b {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      color: #fff;
+      min-width: 50px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chap-split span {
+      font-size: 17px;
+      color: var(--w-60);
+    }
+
+    /* ===========================================================
+       O REGIME — definição, fluxo e benefícios + quadro tributário
+       =========================================================== */
+    .reg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .reg-def {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 34px;
+      line-height: 1.24;
+      letter-spacing: -.02em;
+      color: var(--blue-deep);
+    }
+
+    .reg-def strong {
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .reg-sub {
+      margin-top: 16px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #3d4a63;
+    }
+
+    /* Importa → industrializa → exporta: trilho horizontal */
+    .reg-steps {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .reg-steps li {
+      position: relative;
+      padding-top: 32px;
+      font-size: 16px;
+      line-height: 1.45;
+      color: #3d4a63;
+    }
+
+    .reg-steps li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: -24px;
+      top: 7px;
+      height: 2px;
+      background: #4cac4b;
+    }
+
+    .reg-steps li:last-child::before {
+      right: 0;
+      background: linear-gradient(90deg, #4cac4b 0%, #d5dcea 100%);
+    }
+
+    .reg-steps li::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 2px solid #3f9a3e;
+      background: #f9f9ff;
+      box-shadow: 0 0 0 5px rgba(76, 172, 75, .14);
+    }
+
+    .reg-steps span {
+      display: block;
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      color: #24651f;
+    }
+
+    .reg-steps b {
+      font-weight: 600;
+      color: var(--blue-deep);
+    }
+
+    .reg-ben {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .reg-ben>div {
+      padding: 20px 22px 22px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid #e3e8f2;
+      border-left: 3px solid var(--blue);
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .06);
+    }
+
+    .reg-ben-k {
+      margin-bottom: 6px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      color: var(--blue-deep);
+    }
+
+    .reg-ben-t {
+      font-size: 15.5px;
+      line-height: 1.5;
+      color: #3d4a63;
+    }
+
+    .reg-src {
+      margin-top: 26px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.6;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #5f6d87;
+    }
+
+    /* Âncora escura sobre o claro: o quadro tributário é o
+       ponto focal do slide, como os StatCards do design system. */
+    .tax {
+      border-radius: 22px;
+      padding: 34px 40px 30px;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 24px 48px rgba(36, 69, 130, .2);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tax::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(76, 172, 75, .16) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    .tax-l {
+      margin-bottom: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #9fdc9e;
+    }
+
+    .tax-i {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--w-60);
+    }
+
+    .tax-rows {
+      list-style: none;
+    }
+
+    .tax-rows li {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .tax-rows b {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .tax-rows s {
+      font-size: 15px;
+      color: var(--w-45);
+      text-decoration-color: rgba(126, 208, 125, .7);
+      text-decoration-thickness: 1.5px;
+    }
+
+    .tax-rows em {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px 5px 12px;
+      border-radius: 999px;
+      font-style: normal;
+      font-size: 14px;
+      font-weight: 600;
+      color: #a8e0a7;
+      background: rgba(76, 172, 75, .14);
+      border: 1px solid rgba(126, 208, 125, .38);
+    }
+
+    .tax-rows em::before {
+      content: '';
+      width: 9px;
+      height: 4px;
+      border-left: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: translateY(-2px) rotate(-45deg);
+    }
+
+    .tax-stat {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: center;
+      margin-top: 22px;
+    }
+
+    .tax-n {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 72px;
+      line-height: .9;
+      letter-spacing: -.03em;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .tax-n small {
+      display: block;
+      margin-bottom: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--w-60);
+    }
+
+    .tax-n span {
+      margin-left: 8px;
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--w-60);
+    }
+
+    .tax-t {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--w-80);
+    }
+
+    .tax-t span {
+      display: block;
+      margin-top: 8px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--w-45);
+    }
+
+    .tax-note {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .14);
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--w-60);
+      position: relative;
+      z-index: 1;
+    }
+
+    .tax-note b {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       A ZPE MARANHÃO — ficha + linha do tempo
+       =========================================================== */
+    .ficha {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr 1.25fr 1.05fr;
+      gap: 20px;
+    }
+
+    .ficha .kpi {
+      padding: 28px 28px 26px;
+    }
+
+    /* Valor textual do card (nome, não número) */
+    .kpi-tv {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      line-height: 1.2;
+      letter-spacing: -.012em;
+      color: #fff;
+    }
+
+    .rail {
+      position: relative;
+      height: 268px;
+      margin-top: 34px;
+    }
+
+    .rail-cap {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    .rail-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      margin-top: -1px;
+      background: var(--hair-strong);
+    }
+
+    /* Faixa do período coberto pelo relatório */
+    .rail-period {
+      position: absolute;
+      top: 50%;
+      height: 32px;
+      margin-top: -16px;
+      border-radius: 999px;
+      background: rgba(76, 172, 75, .12);
+      border: 1px solid rgba(76, 172, 75, .42);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform .9s var(--ease);
+    }
+
+    .rail-period span {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #8fd28e;
+      white-space: nowrap;
+    }
+
+    /* Quebra do eixo: 1988 fica fora da escala de 2024–2026 */
+    .rail-brk {
+      position: absolute;
+      top: 50%;
+      width: 24px;
+      height: 18px;
+      margin: -9px 0 0 -12px;
+    }
+
+    .rail-brk::before,
+    .rail-brk::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 7px;
+      width: 2px;
+      height: 18px;
+      background: var(--w-45);
+      transform: skewX(-24deg);
+    }
+
+    .rail-brk::after {
+      left: 15px;
+    }
+
+    .rail-m {
+      position: absolute;
+      top: 50%;
+      width: 0;
+      height: 0;
+    }
+
+    .rail-m::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: -8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-slide);
+      border: 2px solid var(--green);
+      box-shadow: 0 0 0 5px rgba(76, 172, 75, .14);
+      z-index: 2;
+    }
+
+    .rail-x {
+      position: absolute;
+      left: 0;
+      width: 1px;
+      height: 36px;
+      background: var(--hair-strong);
+    }
+
+    .rail-m.up .rail-x {
+      bottom: 12px;
+    }
+
+    .rail-m.dn .rail-x {
+      top: 12px;
+    }
+
+    .rail-b {
+      position: absolute;
+      left: -14px;
+      width: 250px;
+    }
+
+    .rail-m.up .rail-b {
+      bottom: 56px;
+    }
+
+    .rail-m.dn .rail-b {
+      top: 56px;
+    }
+
+    .rail-m.end .rail-b {
+      left: auto;
+      right: -14px;
+      text-align: right;
+    }
+
+    .rail-d {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .rail-t {
+      display: block;
+      font-size: 16px;
+      line-height: 1.42;
+      color: var(--w-80);
+    }
+
+    /* ===========================================================
+       SITUAÇÃO NO CZPE — total + barras por projeto
+       =========================================================== */
+    .czpe {
+      display: grid;
+      grid-template-columns: 580px 1fr;
+      gap: 64px;
+      align-items: stretch;
+    }
+
+    .hero {
+      border-radius: 22px;
+      padding: 46px 44px;
+      border: 1px solid rgba(76, 172, 75, .32);
+      background: linear-gradient(168deg, rgba(36, 69, 130, .5) 0%, rgba(13, 27, 60, .9) 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Vídeo de fundo: a malha de quadras com os lotes acendendo.
+       Fica sob um véu — nunca sob o número sem proteção. */
+    .hero .hero-video {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-width: none;
+      max-height: none;
+      opacity: 0;
+      transition: opacity 520ms cubic-bezier(.2, 0, 0, 1);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 26%, rgba(0, 0, 0, .3) 50%, #000 86%);
+      mask-image: linear-gradient(90deg, transparent 0%, transparent 26%, rgba(0, 0, 0, .3) 50%, #000 86%);
+    }
+
+    .hero .hero-video.is-playing {
+      opacity: .55;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(100deg, rgba(13, 27, 60, .96) 0%, rgba(13, 27, 60, .88) 42%, rgba(13, 27, 60, .46) 76%, rgba(13, 27, 60, .26) 100%);
+      pointer-events: none;
+    }
+
+    .hero>* {
+      position: relative;
+      z-index: 2;
+    }
+
+
+    .hero-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      margin-bottom: 18px;
+    }
+
+    .hero-big {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 112px;
+      line-height: .95;
+      letter-spacing: -.045em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero-big em {
+      font-style: normal;
+      font-size: 38px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--green);
+      margin-right: 10px;
+      vertical-align: .9em;
+    }
+
+    .hero-big small {
+      font-size: 46px;
+      font-weight: 500;
+      letter-spacing: -.01em;
+      color: var(--w-60);
+      margin-left: 8px;
+    }
+
+    .hero-d {
+      margin-top: 22px;
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--w-60);
+      max-width: 34ch;
+    }
+
+    .hero-split {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid var(--hair);
+      display: flex;
+      gap: 48px;
+    }
+
+    .hero-s-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: #fff;
+    }
+
+    .hero-s-l {
+      margin-top: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      line-height: 1.5;
+    }
+
+    .inv {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      border-top: 1px solid var(--hair);
+    }
+
+    .inv-row {
+      padding: 16px 0 18px;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .inv-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .inv-n {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      letter-spacing: -.012em;
+      color: var(--w-100);
+    }
+
+    .ptag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--hair-strong);
+      color: var(--w-60);
+    }
+
+    .inv-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: -.03em;
+      color: #fff;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .inv-v em {
+      font-style: normal;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--green);
+      margin-right: 6px;
+    }
+
+    .inv-v span {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--w-60);
+      margin-left: 5px;
+    }
+
+    .inv-meta {
+      margin-top: 9px;
+      font-size: 16px;
+      color: var(--w-60);
+    }
+
+    /* Trilha + preenchimento genéricos (barras animadas por data-w) */
+    .track {
+      height: 10px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .07);
+      overflow: hidden;
+    }
+
+    /* A largura final vem de data-w; o crescimento é só transform,
+       sem recalcular layout a cada quadro. */
+    .fill {
+      height: 100%;
+      width: 0;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--green-deep) 0%, var(--green) 100%);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 1.05s var(--ease);
+    }
+
+    /* ===========================================================
+       CARTEIRA — funil de etapas + frentes industriais (claro)
+       =========================================================== */
+    /* Carteira: quatro números, um por card */
+    .cpj {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .cpj-c {
+      border-radius: 18px;
+      padding: 30px 30px 28px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    .cpj-hi {
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      border-color: transparent;
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 18px 40px rgba(36, 69, 130, .18);
+    }
+
+    .cpj-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 84px;
+      line-height: .9;
+      letter-spacing: -.04em;
+      color: var(--blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cpj-t {
+      margin-top: 14px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 23px;
+      line-height: 1.22;
+      color: var(--blue-deep);
+    }
+
+    .cpj-n {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    .cpj-sub {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+    }
+
+    .cpj-sub .cpj-t {
+      margin-top: 0;
+      font-size: 19px;
+    }
+
+    .cpj-sub b {
+      margin-right: 4px;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .cpj-hi .cpj-v,
+    .cpj-hi .cpj-t {
+      color: #fff;
+    }
+
+    .cpj-hi .cpj-n {
+      color: var(--w-60);
+    }
+
+    /* Corpo técnico: uma coluna por diretoria, uma linha por pessoa */
+    .eqp {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    .eqp-h {
+      padding-bottom: 12px;
+      margin-bottom: 4px;
+      border-bottom: 2px solid var(--green);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--blue-deep);
+    }
+
+    .eqp-p {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 16px 0;
+      border-bottom: 1px solid #e3e8f2;
+    }
+
+    .eqp-p:last-child {
+      border-bottom: none;
+    }
+
+    .eqp-f {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #dfe5f1;
+      box-shadow: 0 0 0 3px #fff, 0 2px 8px rgba(36, 69, 130, .14);
+    }
+
+    /* Sem foto ainda: iniciais no lugar */
+    .eqp-a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      letter-spacing: .02em;
+      color: #fff;
+    }
+
+    .eqp-n {
+      margin-top: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      line-height: 1.2;
+      color: var(--blue-deep);
+    }
+
+    .eqp-c {
+      margin-top: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #24651f;
+    }
+
+    .eqp-d {
+      margin-top: 6px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+
+    .frentes {
+      margin-top: 30px;
+    }
+
+    .sub-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      margin-bottom: 16px;
+    }
+
+    .s-light .sub-l {
+      color: #5f6d87;
+    }
+
+    .sub-l b {
+      font-weight: 600;
+      color: var(--w-80);
+    }
+
+    .s-light .sub-l b {
+      color: var(--ink);
+    }
+
+    .frentes-g {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .frente {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 92px;
+      padding: 22px 24px;
+      border-radius: 14px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .04);
+      transition: border-color .24s var(--ease), transform .24s var(--ease), box-shadow .24s var(--ease);
+    }
+
+    .frente:hover {
+      border-color: var(--green);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(36, 69, 130, .06), 0 12px 28px rgba(36, 69, 130, .1);
+    }
+
+    .frente i {
+      font-style: normal;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--green-pressed);
+      flex: none;
+    }
+
+    .frente span {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 1.22;
+      color: var(--ink);
+    }
+
+    /* ===========================================================
+       SUMÁRIO EXECUTIVO — seis mensagens
+       =========================================================== */
+    .msgs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .msg {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 22px;
+      align-items: start;
+      padding: 36px 32px 36px;
+      border-radius: 18px;
+      border: 1px solid var(--hair);
+      background: rgba(255, 255, 255, .035);
+      transition: border-color .26s var(--ease), background .26s var(--ease), transform .26s var(--ease);
+    }
+
+    .msg:hover {
+      border-color: rgba(76, 172, 75, .45);
+      background: rgba(76, 172, 75, .05);
+      transform: translateY(-3px);
+    }
+
+    .msg-ico {
+      width: 50px;
+      height: 50px;
+      border-radius: 13px;
+      background: rgba(76, 172, 75, .13);
+      border: 1px solid rgba(76, 172, 75, .32);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .msg-ico svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .msg-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 1.24;
+      letter-spacing: -.01em;
+      color: var(--w-100);
+      margin-bottom: 12px;
+    }
+
+    .msg-d {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--w-60);
+    }
+
+    .msg-d b {
+      color: var(--w-80);
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       PANORAMA — equipe e volume por diretoria (claro)
+       =========================================================== */
+    .eq {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eq-row {
+      display: grid;
+      grid-template-columns: 420px 1fr 430px;
+      gap: 40px;
+      align-items: center;
+      padding: 19px 6px;
+      border-bottom: 1px solid #e3e8f2;
+    }
+
+    .eq-head {
+      padding-top: 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #cdd5e4;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #5f6d87;
+    }
+
+    .eq-d {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    .eq-d small {
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--green-pressed);
+    }
+
+    .eq-p {
+      font-size: 16.5px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    .eq-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .eq-bar .track {
+      flex: 1;
+      background: #e8edf6;
+    }
+
+    .eq-bar .fill {
+      background: linear-gradient(90deg, var(--blue) 0%, #4a7bd0 100%);
+    }
+
+    .eq-v {
+      min-width: 58px;
+      text-align: right;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: var(--blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* A Presidência fica fora do total das diretorias */
+    .eq-pres {
+      border-top: 1px dashed #c3cde0;
+      border-bottom: none;
+      margin-top: 6px;
+    }
+
+    .eq-pres .eq-bar .fill {
+      background: linear-gradient(90deg, #7d93c4 0%, #a9bbe0 100%);
+    }
+
+    .eq-pres .eq-v {
+      color: #4f6699;
+    }
+
+    /* ===========================================================
+       GRUPOS DE ENTREGÁVEIS — cartão genérico dos capítulos
+       Contagem (branco) + nome do grupo + itens resumidos.
+       A redação integral de cada item fica na lista do setor.
+       =========================================================== */
+    .grp {
+      border-radius: 18px;
+      padding: 26px 28px 26px;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid var(--hair);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      transition: border-color .26s var(--ease), background .26s var(--ease);
+    }
+
+    .grp:hover {
+      border-color: rgba(76, 172, 75, .4);
+    }
+
+    .grp-h {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .grp-n {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      flex: none;
+    }
+
+    .grp-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      line-height: 1.25;
+      letter-spacing: -.005em;
+      color: var(--w-100);
+    }
+
+    .grp-l {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .grp-l li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--w-80);
+    }
+
+    .grp-l li::before {
+      content: '';
+      position: absolute;
+      left: 1px;
+      top: .62em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .grp-l.cols2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 34px;
+      row-gap: 9px;
+    }
+
+    .grp-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--w-45);
+      margin: 18px 0 10px;
+    }
+
+    .grp-h+.grp-sub {
+      margin-top: 0;
+    }
+
+    .grp-sub b {
+      color: var(--w-80);
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .grp .chips {
+      margin-top: 0;
+    }
+
+    .chip em {
+      font-style: normal;
+      color: var(--w-45);
+      margin-left: 7px;
+    }
+
+    /* Status de item: em andamento (âmbar) e contínuo (azul) */
+    .stt {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 24px;
+      padding: 0 10px;
+      margin-left: 8px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      vertical-align: 2px;
+      white-space: nowrap;
+    }
+
+    .stt::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .stt-and {
+      background: rgba(194, 163, 90, .12);
+      border: 1px solid rgba(194, 163, 90, .4);
+      color: #e2cd94;
+    }
+
+    .stt-cont {
+      background: rgba(125, 147, 196, .12);
+      border: 1px solid rgba(125, 147, 196, .38);
+      color: #b4c3e6;
+    }
+
+    /* Grades de grupos por slide */
+    .g22 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .g4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    /* ===========================================================
+       MATRIZ DE PARECERES — um projeto por linha, um selo por peça
+       =========================================================== */
+    .pp-leg {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin: -2px 0 12px;
+      font-size: 14px;
+      color: var(--w-60);
+    }
+
+    .pp-leg span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pp-leg i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(76, 172, 75, .6);
+      background: rgba(76, 172, 75, .25);
+    }
+
+    .pp-leg i.re {
+      border-color: rgba(125, 147, 196, .65);
+      background: rgba(125, 147, 196, .28);
+    }
+
+    .pp-leg i.ac {
+      border-color: var(--green-pressed);
+      background: var(--green-pressed);
+    }
+
+    .pp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .pp-row:last-child {
+      border-bottom: none;
+    }
+
+    .pp-n {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 19.5px;
+      line-height: 1.25;
+      color: var(--w-100);
+      min-width: 0;
+    }
+
+    .pp-n small {
+      margin-left: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14.5px;
+      font-weight: 400;
+      color: var(--w-45);
+    }
+
+    .pp-p {
+      display: flex;
+      gap: 7px;
+      justify-content: flex-end;
+    }
+
+    .pip {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 11px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      border: 1px solid rgba(76, 172, 75, .45);
+      background: rgba(76, 172, 75, .1);
+      color: #9fdc9e;
+    }
+
+    .pip.re {
+      border-color: rgba(125, 147, 196, .48);
+      background: rgba(125, 147, 196, .12);
+      color: #b9c7e8;
+    }
+
+    /* Aceite: único selo cheio. Verde escurecido para o branco passar 4.5:1 */
+    .pip.ac {
+      border-color: var(--green-pressed);
+      background: var(--green-pressed);
+      color: #fff;
+    }
+
+    .pip.so {
+      border-style: dashed;
+    }
+
+    /* ===========================================================
+       MARKETING — faixa de números
+       =========================================================== */
+    .st5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--hair);
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .st {
+      padding: 26px 28px 24px;
+      border-left: 1px solid var(--hair);
+    }
+
+    .st:first-child {
+      border-left: none;
+      padding-left: 4px;
+    }
+
+    .st-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .st-v em {
+      font-style: normal;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: .01em;
+      color: var(--green);
+      margin-left: 8px;
+    }
+
+    .st-d {
+      margin-top: 11px;
+      font-size: 15.5px;
+      line-height: 1.48;
+      color: var(--w-60);
+    }
+
+    /* ===========================================================
+       ÂNCORAS ESCURAS SOBRE O CLARO — números de destaque
+       (StatCard do design system: Abyss + número branco)
+       =========================================================== */
+    .anc {
+      border-radius: 18px;
+      padding: 30px 32px 28px;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 18px 40px rgba(36, 69, 130, .18);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .anc::after {
+      content: '';
+      position: absolute;
+      right: -70px;
+      bottom: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(76, 172, 75, .16) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    .anc-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 84px;
+      line-height: .92;
+      letter-spacing: -.045em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .anc-l {
+      margin-top: 16px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 23px;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    .anc-d {
+      margin-top: 8px;
+      font-size: 15.5px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, .8);
+    }
+
+    /* ===========================================================
+       MEIO AMBIENTE — marcos do licenciamento
+       =========================================================== */
+    /* Só os três marcos do licenciamento, em destaque */
+    .lic-3 {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 24px;
+    }
+
+    .lic-3 .marco {
+      min-height: 300px;
+      padding: 40px 40px 36px;
+    }
+
+    .lic-3 .marco-t {
+      font-size: 38px;
+    }
+
+    .lic {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1.55fr;
+      gap: 18px;
+    }
+
+    .marco {
+      border-radius: 18px;
+      padding: 26px 28px 26px;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 18px 40px rgba(36, 69, 130, .16);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .marco-ico {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 6px rgba(76, 172, 75, .18);
+    }
+
+    .marco-ico svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .marco-t {
+      margin-top: 26px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 1.18;
+      letter-spacing: -.01em;
+    }
+
+    .marco-s {
+      margin-top: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #9fdc9e;
+    }
+
+    .lic-steps {
+      border-radius: 18px;
+      padding: 22px 26px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    /* ===========================================================
+       CHAMADA CURTA — destaque escuro compacto (Comercial)
+       =========================================================== */
+    .call {
+      border-radius: 18px;
+      padding: 28px 30px;
+      border: 1px solid rgba(76, 172, 75, .38);
+      background: linear-gradient(168deg, rgba(76, 172, 75, .12) 0%, rgba(76, 172, 75, .03) 100%);
+    }
+
+    .call-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #8fd28e;
+      margin-bottom: 14px;
+    }
+
+    .call-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 28px;
+      line-height: 1.3;
+      letter-spacing: -.016em;
+      color: #fff;
+    }
+
+    .call-t strong {
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       ENCERRAMENTO — síntese numérica do período
+       =========================================================== */
+    .end-k {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 18px;
+      margin: 44px 0 46px;
+    }
+
+    .end-k>div {
+      border-radius: 18px;
+      padding: 26px 28px 24px;
+      border: 1px solid var(--hair);
+      background: rgba(10, 22, 40, .42);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .end-k-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .end-k-v em {
+      font-style: normal;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--green);
+      margin-right: 6px;
+    }
+
+    .end-k-v small {
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--w-60);
+      margin-left: 5px;
+      letter-spacing: -.01em;
+    }
+
+    .end-k-d {
+      margin-top: 12px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--w-80);
+    }
+
+    /* ===========================================================
+       TEMA CLARO — overrides dos componentes deste deck
+       =========================================================== */
+    .s-light .setor,
+    .s-light .grp {
+      background: var(--canvas);
+      border-color: #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    .s-light .setor:hover,
+    .s-light .grp:hover {
+      border-color: var(--green);
+      background: var(--canvas);
+      box-shadow: 0 2px 4px rgba(36, 69, 130, .06), 0 12px 28px rgba(36, 69, 130, .1);
+    }
+
+    .s-light .setor-t,
+    .s-light .grp-t {
+      color: var(--ink);
+    }
+
+    .s-light .setor-d,
+    .s-light .grp-l li {
+      color: var(--ink-soft);
+    }
+
+    .s-light .setor-n {
+      color: var(--green-pressed);
+    }
+
+    .s-light .grp-h {
+      border-bottom-color: #e6eaf4;
+    }
+
+    .s-light .grp-n {
+      color: var(--blue);
+    }
+
+    .s-light .grp-l li::before {
+      background: var(--green-pressed);
+    }
+
+    .s-light .grp-sub {
+      color: #5f6d87;
+    }
+
+    .s-light .grp-sub b {
+      color: var(--ink);
+    }
+
+    .s-light .chip {
+      background: #f4f6fc;
+      border-color: #e1e7f3;
+      color: var(--ink-soft);
+    }
+
+    .s-light .chip em {
+      color: #5f6d87;
+    }
+
+    .s-light .chip:hover {
+      border-color: rgba(47, 122, 46, .5);
+      background: var(--green-pale);
+      color: #1f4a1d;
+    }
+
+    .s-light .kv {
+      border-bottom-color: #e3e8f2;
+    }
+
+    .s-light .kv-ico {
+      background: var(--green-pale);
+      border-color: rgba(47, 122, 46, .34);
+      color: var(--green-pressed);
+    }
+
+    .s-light .kv-t {
+      color: var(--ink-soft);
+    }
+
+    .s-light .kv-t b {
+      color: var(--ink);
+    }
+
+    .s-light .stt-and {
+      background: #fdf6e3;
+      border-color: rgba(150, 110, 20, .32);
+      color: #6b4a08;
+    }
+
+    .s-light .stt-cont {
+      background: var(--blue-pale);
+      border-color: rgba(36, 69, 130, .25);
+      color: var(--blue);
+    }
+
+    /* ===========================================================
+       PREENCHIMENTO VERTICAL — grades deste deck
+       Mesmo critério do CONSAD: cards de lista ficam com altura
+       natural (esticados viram colunas ocas); a grade centra na
+       faixa útil do .body.
+       =========================================================== */
+    /* Slides de conteúdo curto: o cabeçalho deixa de ser fixo no topo
+       e o conjunto inteiro (eyebrow + título + grade) centraliza no
+       slide. Evita tanto o vão sob o título quanto o vazio no rodapé.
+       (Mesma regra do CONSAD; .slide>.pad>.body tem especificidade
+       0-0-3, por isso o seletor longo.) */
+    .slide>.pad.pad-center {
+      justify-content: center;
+    }
+
+    .slide>.pad.pad-center>.body.body-top {
+      flex: none;
+      justify-content: flex-start;
+    }
+
+    .body>.rot {
+      flex: 1;
+      min-height: 0;
+      max-height: 600px;
+    }
+
+    .body>.reg {
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Altura natural: o card do total acompanha a lista de barras */
+    .body>.czpe {
+      flex: none;
+    }
+
+    /* Selo de status na linha do índice do card, não no título */
+    .setor-n {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 24px;
+    }
+
+    .setor-n .stt {
+      margin-left: 0;
+    }
+
+    /* Operações: oito cards com descrição — mais respiro e corpo
+       maior, já que é o slide inteiro do capítulo */
+    .ops>.setor {
+      padding: 32px 30px 32px;
+    }
+
+    .ops .setor-t {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .ops .setor-d {
+      font-size: 16.5px;
+      line-height: 1.58;
+    }
+
+    /* Faixa horizontal: grupo curto que fecha a grade acima */
+    .grp-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 36px;
+      padding: 20px 28px;
+    }
+
+    .grp-row .grp-h {
+      flex: none;
+      margin: 0;
+      padding: 0 36px 0 0;
+      border-bottom: none;
+      border-right: 1px solid var(--hair);
+    }
+
+    .s-light .grp-row .grp-h {
+      border-right-color: #e6eaf4;
+    }
+
+    .grp-l.grp-inline {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px 44px;
+    }
+
+    .body>.grp-row {
+      flex: none;
+    }
+
+    /* Impressão/PDF: estado final das barras, sem depender da animação */
+    @media print {
+
+      .fill,
+      .rail-period {
+        transform: none !important;
+      }
+    }
+
+    .body>.eq,
+    .body>.msgs,
+    .body>.g22,
+    .body>.g4,
+    .body>.cpj,
+    .body>.lic,
+    .body>.st5,
+    .body>.ficha,
+    .body>.rail,
+    .body>.frentes {
+      flex: none;
+    }
+
+    /* Grades de dois níveis: as linhas de cards acompanham a
+       coluna mais alta, sem esticar até o rodapé. */
+    .g22>.grp,
+    .g4>.grp {
+      height: 100%;
+    }
+
+    /* ===========================================================
+       CHROME — HUD, progresso, controles
+       =========================================================== */
+    .hud {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 54px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 26px;
+      background: rgba(5, 11, 24, .78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, .07);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s var(--ease);
+    }
+
+    .hud.on {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .hud-bloco {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .6);
+      white-space: nowrap;
+      min-width: 118px;
+    }
+
+    .hud-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .hud-dot {
+      /* 8px visual; a área clicável de 44px vem do ::before (WCAG 2.5.8) */
+      position: relative;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .28);
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      flex: none;
+      transition: background .26s var(--ease), transform .26s var(--ease);
+    }
+
+    .hud-dot::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 44px;
+      height: 44px;
+      transform: translate(-50%, -50%);
+    }
+
+    .hud-dot:hover {
+      background: rgba(255, 255, 255, .45);
+      transform: scale(1.25);
+    }
+
+    .hud-dot.on {
+      background: var(--green);
+      transform: scale(1.25);
+    }
+
+    .hud-sp {
+      flex: 1;
+    }
+
+    .hud-c {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: rgba(255, 255, 255, .5);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 0;
+      background: var(--green);
+      z-index: 101;
+      transition: width .5s var(--ease);
+    }
+
+    .ctrl {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      z-index: 1000;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl button {
+      width: 44px;
+      height: 44px;
+      border-radius: 9px;
+      background: rgba(0, 0, 0, .34);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: rgba(255, 255, 255, .72);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+    }
+
+    .ctrl button:hover {
+      background: rgba(0, 0, 0, .6);
+      color: #fff;
+      border-color: rgba(255, 255, 255, .3);
+    }
+
+    .ctrl button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Setas de toque */
+    .tarrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, .13);
+      color: rgba(255, 255, 255, .7);
+      z-index: 99;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tarrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .tprev {
+      left: 16px;
+    }
+
+    .tnext {
+      right: 16px;
+    }
+
+    @media (pointer:coarse) {
+      .tarrow {
+        display: flex;
+      }
+    }
+
+    /* Índice de slides (overlay) */
+    .idx {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(5, 11, 24, .93);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 64px 72px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s var(--ease), visibility .28s var(--ease);
+    }
+
+    .idx.on {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .idx-h {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 34px;
+      color: #fff;
+      margin-bottom: 30px;
+      letter-spacing: -.02em;
+    }
+
+    .idx-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      max-width: 1300px;
+    }
+
+    .idx-i {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 18px;
+      border-radius: 11px;
+      border: 1px solid rgba(255, 255, 255, .09);
+      background: rgba(255, 255, 255, .035);
+      color: rgba(255, 255, 255, .82);
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.35;
+      transition: border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .idx-i:hover {
+      border-color: rgba(76, 172, 75, .5);
+      background: rgba(76, 172, 75, .08);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    .idx-i.on {
+      border-color: var(--green);
+      background: rgba(76, 172, 75, .13);
+      color: #fff;
+    }
+
+    .idx-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--green);
+      flex: none;
+      width: 22px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      transition: opacity .55s var(--ease), visibility .55s var(--ease);
+    }
+
+    #loader.off {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #loader img {
+      height: 58px;
+      opacity: .92;
+    }
+
+    .ld-track {
+      width: 230px;
+      height: 2px;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .ld-bar {
+      height: 100%;
+      width: 0;
+      background: var(--green);
+      border-radius: 2px;
+      transition: width .3s var(--ease);
+    }
+
+    .ld-txt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .4);
+    }
+
+    /* ===========================================================
+       ============  COMPONENTES DO CONSAD DE OUTUBRO  ============
+       Tudo abaixo é específico deste deck (10ª Reunião Ordinária).
+       A base acima vem do template deck-relatorio sem alteração.
+       =========================================================== */
+
+    /* Selo neutro: item da ordem do dia (não é deliberação nem ciência) */
+    .tag-item {
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid var(--hair-strong);
+      color: var(--w-80);
+    }
+
+    .pauta-row .tag-item {
+      min-width: 148px;
+      justify-content: center;
+    }
+
+    .tag-item::before {
+      background: var(--green);
+    }
+
+    .pauta-row .pauta-t small {
+      max-width: 60ch;
+    }
+
+    /* ===========================================================
+       FOTO — moldura única para todo registro da missão
+       As fotos chegaram pelo WhatsApp (720 a 1600 px): nunca maiores
+       que ~640 px de lado no palco, para não amolecer no projetor.
+       =========================================================== */
+    .ph {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--card-dark-2);
+      box-shadow: 0 2px 6px rgba(5, 11, 24, .28), 0 18px 44px rgba(5, 11, 24, .32);
+    }
+
+    .ph img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-width: none;
+      max-height: none;
+    }
+
+    .ph::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, .08);
+      pointer-events: none;
+    }
+
+    .s-light .ph {
+      background: #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .08), 0 14px 34px rgba(36, 69, 130, .14);
+    }
+
+    .s-light .ph::after {
+      border-color: rgba(36, 69, 130, .08);
+    }
+
+    /* Legenda sobre a base da foto, num véu que só cobre a faixa do texto */
+    .ph figcaption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 44px 20px 16px;
+      background: linear-gradient(0deg, rgba(7, 15, 34, .88) 0%, rgba(7, 15, 34, .5) 60%, transparent 100%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--w-80);
+      line-height: 1.5;
+    }
+
+    /* ===========================================================
+       ABERTURA COM FOTO — capítulo da missão
+       =========================================================== */
+    .chap.chap-foto {
+      grid-template-columns: 1fr 520px;
+      gap: 96px;
+    }
+
+    .chap-foto .ph {
+      height: 690px;
+    }
+
+    .chap-foto .ph img {
+      object-position: 50% 40%;
+    }
+
+    /* ===========================================================
+       MISSÃO EM NÚMEROS — objetivos + quatro números
+       =========================================================== */
+    .msn {
+      display: grid;
+      grid-template-columns: 1.08fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .obj {
+      border-top: 1px solid var(--hair);
+    }
+
+    .obj-i {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 22px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .obj-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      color: var(--green);
+      padding-top: 6px;
+    }
+
+    .obj-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      line-height: 1.2;
+      letter-spacing: -.01em;
+      color: var(--w-100);
+    }
+
+    .obj-d {
+      margin-top: 8px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--w-60);
+    }
+
+    .msn-k {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .msn-k .kpi {
+      padding: 32px 32px 30px;
+    }
+
+    .msn-k .kpi-v {
+      font-size: 76px;
+    }
+
+    .msn-k .kpi-v small {
+      font-size: 26px;
+    }
+
+    /* ===========================================================
+       ROTEIRO DA MISSÃO — trilho de paradas (claro)
+       Gerado de AGENDA (JS): só entram as paradas confirmadas.
+       =========================================================== */
+    .agd {
+      position: relative;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 20px;
+      padding-top: 46px;
+    }
+
+    /* Trilho atravessando as paradas, na altura dos nós */
+    .agd::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 13px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(36, 69, 130, .12) 0%, rgba(36, 69, 130, .3) 12%, rgba(36, 69, 130, .3) 88%, rgba(36, 69, 130, .12) 100%);
+    }
+
+    .agd-s {
+      position: relative;
+      border-radius: 18px;
+      padding: 26px 26px 24px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    .agd-s::before {
+      content: '';
+      position: absolute;
+      left: 26px;
+      top: -41px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--canvas);
+      border: 2px solid var(--green-deep);
+      box-shadow: 0 0 0 5px rgba(76, 172, 75, .14);
+    }
+
+    .agd-s::after {
+      content: '';
+      position: absolute;
+      left: 33px;
+      top: -23px;
+      width: 2px;
+      height: 23px;
+      background: rgba(36, 69, 130, .18);
+    }
+
+    /* Trechos de viagem: nó vazado, card rebaixado */
+    .agd-s.via {
+      background: transparent;
+      border-style: dashed;
+      border-color: #cfd8ea;
+      box-shadow: none;
+    }
+
+    .agd-s.via::before {
+      border-color: #9aa9c4;
+      box-shadow: none;
+    }
+
+    .agd-d {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #24651f;
+    }
+
+    .agd-c {
+      margin-top: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      line-height: 1.15;
+      letter-spacing: -.012em;
+      color: var(--blue-deep);
+    }
+
+    .agd-l {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #e6eaf4;
+      list-style: none;
+    }
+
+    .agd-l li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+
+    .agd-l li+li {
+      margin-top: 8px;
+    }
+
+    .agd-l li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .6em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-pressed);
+    }
+
+    .agd-s.via .agd-l li::before {
+      background: #9aa9c4;
+    }
+
+    /* ===========================================================
+       VISITA — texto à esquerda, fotos à direita
+       =========================================================== */
+    .vis {
+      display: grid;
+      grid-template-columns: 1fr 780px;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .vis-fotos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      height: 560px;
+    }
+
+    .vis-fotos .ph {
+      height: 100%;
+    }
+
+    .vis-t {
+      font-size: 21px;
+      line-height: 1.6;
+      color: var(--w-80);
+      max-width: 44ch;
+    }
+
+    .vis-t b {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .s-light .vis-t {
+      color: var(--ink-soft);
+    }
+
+    .s-light .vis-t b {
+      color: var(--ink);
+    }
+
+    .vis-chips {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .vchip {
+      display: inline-flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid var(--hair-strong);
+      background: rgba(255, 255, 255, .04);
+      font-size: 15.5px;
+      font-weight: 500;
+      color: var(--w-80);
+    }
+
+    /* Citação da presidente: Barlow 300, aspas em verde no detalhe */
+    .qt {
+      margin-top: 34px;
+      padding: 28px 32px 26px 32px;
+      border-left: 3px solid var(--green);
+      background: linear-gradient(90deg, rgba(36, 69, 130, .26) 0%, rgba(36, 69, 130, 0) 100%);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .qt-t {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 25px;
+      line-height: 1.42;
+      letter-spacing: -.008em;
+      color: var(--w-100);
+    }
+
+    .qt-t::before {
+      content: '\201C';
+      color: var(--green);
+      font-weight: 600;
+      margin-right: 2px;
+    }
+
+    .qt-t::after {
+      content: '\201D';
+      color: var(--green);
+      font-weight: 600;
+      margin-left: 1px;
+    }
+
+    .qt-a {
+      margin-top: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    .s-light .qt {
+      background: linear-gradient(90deg, var(--blue-pale) 0%, rgba(238, 242, 251, 0) 100%);
+      border-left-color: var(--green-deep);
+    }
+
+    .s-light .qt-t {
+      color: var(--blue-deep);
+    }
+
+    .s-light .qt-t::before,
+    .s-light .qt-t::after {
+      color: var(--green-pressed);
+    }
+
+    .s-light .qt-a {
+      color: #5f6d87;
+    }
+
+    /* ===========================================================
+       NANSHA — três frentes do mesmo distrito (claro)
+       =========================================================== */
+    .ns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .ns-c {
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+      overflow: hidden;
+    }
+
+    .ns-c .ph {
+      height: 268px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .ns-c .ph::after {
+      border: none;
+    }
+
+    .ns-b {
+      padding: 24px 28px 26px;
+    }
+
+    .ns-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #24651f;
+    }
+
+    .ns-t {
+      margin-top: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      line-height: 1.15;
+      letter-spacing: -.012em;
+      color: var(--blue-deep);
+    }
+
+    .ns-d {
+      margin-top: 10px;
+      font-size: 16.5px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .ns-v {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #e6eaf4;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .ns-v b {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: var(--blue);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .ns-v b small {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0;
+      color: var(--blue-deep);
+      margin-left: 3px;
+    }
+
+    .ns-v span {
+      font-size: 14.5px;
+      line-height: 1.4;
+      color: var(--ink-soft);
+    }
+
+    /* Faixa de leitura do slide: a conexão com Bacabeira */
+    .ns-call {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 28px;
+      border-radius: 16px;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 14px 32px rgba(36, 69, 130, .16);
+    }
+
+    .ns-call img {
+      width: 34px;
+      height: auto;
+      flex: none;
+    }
+
+    .ns-call p {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      font-size: 23px;
+      line-height: 1.35;
+      color: var(--w-100);
+    }
+
+    .ns-call p b {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* ===========================================================
+       FABRICANTE DE ALUMÍNIO — foto, números e oportunidade
+       =========================================================== */
+    .alu {
+      display: grid;
+      grid-template-columns: 480px 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    /* Moldura no formato da foto (3:4): esticada até a altura do bloco,
+       a capa cortava a integrante na borda direita. */
+    .alu .ph {
+      width: 480px;
+      aspect-ratio: 3 / 4;
+    }
+
+    /* ===========================================================
+       MURAL — registro fotográfico de uma visita (claro)
+       Grade 6×2: células 1×1 recebem foto em pé (3:4), 2×1 recebe
+       paisagem (16:9) e 2×2 é o destaque. O formato da célula
+       acompanha o da foto, para a capa não cortar pessoas.
+       =========================================================== */
+    .mural {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(2, 284px);
+      gap: 16px;
+    }
+
+    .mural .ph {
+      height: 100%;
+    }
+
+    .mural .m-hero {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .mural .m-wide {
+      grid-column: span 2;
+    }
+
+    .alu-k {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .alu-k .kpi {
+      padding: 24px 22px 22px;
+    }
+
+    .alu-k .kpi-v {
+      font-size: 46px;
+    }
+
+    .alu-k .kpi-v small {
+      font-size: 20px;
+    }
+
+    .alu-k .kpi-d {
+      font-size: 14.5px;
+    }
+
+    .alu .call {
+      margin-top: 18px;
+      padding: 22px 28px;
+    }
+
+    .alu .call-t {
+      font-size: 23px;
+    }
+
+    .alu-note {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--hair);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--w-60);
+    }
+
+    .alu-note b {
+      color: var(--w-80);
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       SHENZHEN — a origem do modelo + porto inteligente
+       =========================================================== */
+    .szn {
+      display: grid;
+      grid-template-columns: 1fr 640px;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .szn .ph {
+      height: 480px;
+    }
+
+    .szn .ph img {
+      object-position: 50% 60%;
+    }
+
+    /* Linha do tempo compacta: 1980 → 2026 */
+    .hist {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 2px solid var(--hair-strong);
+    }
+
+    .hist-i {
+      position: relative;
+      padding: 26px 22px 0 0;
+    }
+
+    .hist-i::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -9px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-slide);
+      border: 2px solid var(--green);
+      box-shadow: 0 0 0 5px rgba(76, 172, 75, .14);
+    }
+
+    .hist-y {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hist-t {
+      margin-top: 10px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--w-60);
+    }
+
+    .szn-port {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ===========================================================
+       SÍNTESE DA MISSÃO — o que fica + do contato ao projeto (claro)
+       =========================================================== */
+    .leg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .leg-c {
+      border-radius: 18px;
+      padding: 30px 30px 28px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    .leg-ico {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--green-pale);
+      border: 1px solid rgba(47, 122, 46, .28);
+      color: var(--green-pressed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leg-ico svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .leg-t {
+      margin-top: 20px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 1.2;
+      letter-spacing: -.01em;
+      color: var(--blue-deep);
+    }
+
+    .leg-d {
+      margin-top: 10px;
+      font-size: 16.5px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .flow {
+      margin-top: 40px;
+    }
+
+    .flow-g {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 18px 40px rgba(36, 69, 130, .16);
+    }
+
+    .flow-s {
+      position: relative;
+      padding: 26px 30px 26px 30px;
+    }
+
+    .flow-s+.flow-s {
+      border-left: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    /* Chevron da marca entre etapas */
+    .flow-s+.flow-s::before {
+      content: '';
+      position: absolute;
+      left: -9px;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      margin-top: -8px;
+      border-top: 2px solid var(--green);
+      border-right: 2px solid var(--green);
+      transform: rotate(45deg);
+      background: transparent;
+    }
+
+    .flow-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      color: #9fdc9e;
+    }
+
+    .flow-t {
+      margin-top: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 1.3;
+      color: #fff;
+    }
+
+    /* ===========================================================
+       NEXSOLAR — CDRU assinada
+       =========================================================== */
+    .cdru {
+      display: grid;
+      grid-template-columns: 600px 1fr;
+      gap: 72px;
+      align-items: stretch;
+    }
+
+    .cdru .hero-big {
+      font-size: 128px;
+    }
+
+    .cdru .hero-big small {
+      font-size: 40px;
+      color: var(--w-80);
+    }
+
+    .fic {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fic-r {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: baseline;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .fic-r:first-child {
+      border-top: 1px solid var(--hair);
+    }
+
+    .fic-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    .fic-v {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 1.3;
+      color: var(--w-100);
+    }
+
+    .fic-v b {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .fic-v small {
+      display: block;
+      margin-top: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--w-60);
+    }
+
+    .fic .call {
+      margin-top: 30px;
+    }
+
+    /* ===========================================================
+       CZPE — comprovação de 10% das obras em etapas
+       =========================================================== */
+    .etp {
+      display: grid;
+      grid-template-columns: 0.86fr 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .etp-c {
+      position: relative;
+      border-radius: 18px;
+      padding: 32px 32px 30px;
+      border: 1px solid var(--hair);
+      background: linear-gradient(168deg, rgba(36, 69, 130, .32) 0%, rgba(13, 27, 60, .72) 100%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .etp-c.hi {
+      border-color: rgba(76, 172, 75, .42);
+      background: linear-gradient(168deg, rgba(36, 69, 130, .55) 0%, rgba(13, 27, 60, .92) 100%);
+    }
+
+    .etp-c.prev {
+      background: transparent;
+      border-style: dashed;
+      border-color: var(--hair-strong);
+    }
+
+    .etp-d {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 60px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .etp-d small {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--w-60);
+      margin-left: 8px;
+    }
+
+    .etp-c.prev .etp-d {
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--w-80);
+      letter-spacing: -.015em;
+      line-height: 1.15;
+    }
+
+    .etp-k {
+      margin-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .etp-t {
+      margin-top: 10px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 1.22;
+      color: var(--w-100);
+    }
+
+    .etp-x {
+      margin-top: 12px;
+      font-size: 16.5px;
+      line-height: 1.55;
+      color: var(--w-60);
+    }
+
+    .etp-c .stt {
+      margin: auto 0 0;
+      align-self: flex-start;
+      transform: translateY(14px);
+    }
+
+    .stt-ok {
+      background: rgba(76, 172, 75, .14);
+      border: 1px solid rgba(76, 172, 75, .45);
+      color: #8fd28e;
+    }
+
+    .etp-call {
+      margin-top: 30px;
+    }
+
+    /* ===========================================================
+       CARTEIRA — nomes dos projetos em análise
+       =========================================================== */
+    .cpj-c .cpj-n {
+      font-size: 14.5px;
+    }
+
+    /* ===========================================================
+       ENCERRAMENTO — cinco números
+       =========================================================== */
+    .end-k.end-k5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="deck-viewport" id="viewport">
+    <div class="deck-stage" id="stage">
+
+      <!-- ===================================================
+           SLIDE 1 — CAPA
+           =================================================== -->
+      <section class="slide capa grain active" data-bloco="Abertura">
+        <div class="capa-bg">
+          <video class="capa-video slide-video" id="capaVideo" autoplay muted loop playsinline preload="auto"
+                 poster="assets/videos/video_capa_poster.jpg" aria-hidden="true" tabindex="-1">
+            <source src="assets/videos/video_capa_web.webm" type="video/webm">
+            <source src="assets/videos/video_capa_web.mp4" type="video/mp4">
+          </video>
+          <img class="capa-video-fallback" src="assets/videos/video_capa_poster.jpg" alt="" loading="eager">
+        </div>
+        <div class="capa-veil"></div>
+
+        <div class="capa-inner">
+          <p class="capa-kicker anim d1">Conselho de Administração</p>
+          <h1 class="capa-title anim d2" id="capaTitulo">10ª Reunião<br><strong>Ordinária</strong></h1>
+          <div class="capa-rule anim d3"></div>
+          <div class="capa-orgs anim d4">
+            <span>Investe Maranhão</span>
+            <i></i>
+            <span>ZPE Maranhão</span>
+          </div>
+          <p class="capa-date anim d5" id="capaData"></p>
+        </div>
+
+        <div class="capa-logos anim d6">
+          <img src="assets/logos/zpe_white.png" alt="ZPE Maranhão">
+          <span class="sep"></span>
+          <img src="assets/logos/investe-ma-logo-branco.png" alt="Investe Maranhão">
+          <span class="sep gov-brand"></span>
+          <img class="gov-brand" src="assets/logos/governo-ma-logo.png" alt="Governo do Maranhão">
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 2 — ROTEIRO DA APRESENTAÇÃO DA ZPE
+           =================================================== -->
+      <section class="slide s-dark dots grain" data-bloco="Abertura">
+        <div class="darkmap" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <div class="pauta-head">
+            <div>
+              <p class="eyebrow anim d1">Ordem do dia · ZPE Maranhão</p>
+              <h2 class="title anim d2" style="margin-top:22px">Pauta da <strong
+                  style="font-weight:700">apresentação</strong></h2>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="pauta-list">
+              <div class="pauta-row anim d3">
+                <span class="pauta-n">01</span>
+                <span class="pauta-t">Missão China
+                  <small>Canton Fair, plataforma oficial de investimento, portos, zona franca e fábricas em Guangdong</small></span>
+                <span class="tag tag-item">Item II</span>
+              </div>
+              <div class="pauta-row anim d4">
+                <span class="pauta-n">02</span>
+                <span class="pauta-t">CDRU com a NexSolar
+                  <small>Concessão de direito real de uso assinada em 23 de outubro</small></span>
+                <span class="tag tag-item">Item II</span>
+              </div>
+              <div class="pauta-row anim d5">
+                <span class="pauta-n">03</span>
+                <span class="pauta-t">Comprovação ao CZPE
+                  <small>Execução de 10% das obras de implantação: envios de 15 e 25 de outubro</small></span>
+                <span class="tag tag-item">Item III</span>
+              </div>
+              <div class="pauta-row anim d6">
+                <span class="pauta-n">04</span>
+                <span class="pauta-t">Carteira de projetos
+                  <small>Projetos aprovados, submetidos e em análise para o CZPE</small></span>
+                <span class="tag tag-item">Item III</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Itens da ordem do dia do Ofício Circular nº 11/2026, da Investe MA. II: ações comerciais, parcerias e reuniões estratégicas · III: fases de implantação e projetos para o CZPE.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 3 — ABERTURA · MISSÃO CHINA
+           =================================================== -->
+      <section class="slide s-deep grain" data-bloco="Missão China">
+        <div class="enc-bg">
+          <video class="slide-video" muted loop playsinline preload="none"
+                 poster="assets/videos/video_enc_poster.jpg" aria-hidden="true" tabindex="-1"
+                 data-src-webm="assets/videos/video_enc_web.webm"
+                 data-src-mp4="assets/videos/video_enc_web.mp4"></video>
+        </div>
+        <div class="chap chap-foto">
+          <div>
+            <p class="div-item anim d1">Item II · Ações comerciais e reuniões estratégicas</p>
+            <h2 class="chap-title anim d2">Missão <strong>China</strong></h2>
+            <p class="chap-lede anim d3">De <b>10 a 27 de outubro de 2026</b>, a delegação da ZPE percorreu a província de
+              Guangdong para <b>apresentar Bacabeira a investidores</b> e conhecer portos, zonas francas e fábricas.</p>
+            <div class="chap-team anim d4">
+              <span class="chap-k">Delegação</span>
+              <span class="chap-names">Rakel Murad<i>·</i>Liana Baker<i>·</i>Larissa Sabadini<i>·</i>Roniele Aquino</span>
+            </div>
+          </div>
+          <figure class="ph anim d4">
+            <img src="assets/fotos/canton-delegacao-bandeira-vertical.jpg"
+              alt="A delegação da ZPE Maranhão com a bandeira do estado na Canton Fair">
+            <figcaption>Canton Fair, Guangzhou</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 4 — A MISSÃO EM NÚMEROS
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="darkmap" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Objetivos</p>
+          <h2 class="title anim d2" style="margin:18px 0 28px;font-size:50px">Uma agenda para atrair <strong
+              style="font-weight:700">investimento industrial</strong></h2>
+
+          <div class="body">
+            <div class="msn">
+              <div class="obj anim d3">
+                <div class="obj-i">
+                  <span class="obj-n">01</span>
+                  <div>
+                    <p class="obj-t">Apresentar a ZPE de Bacabeira</p>
+                    <p class="obj-d">A investidores, expositores e a uma plataforma oficial chinesa de apoio ao
+                      investimento no exterior.</p>
+                  </div>
+                </div>
+                <div class="obj-i">
+                  <span class="obj-n">02</span>
+                  <div>
+                    <p class="obj-t">Conhecer quem opera o modelo há décadas</p>
+                    <p class="obj-d">Portos automatizados, zona franca integrada e a cidade onde nasceu o modelo que
+                      inspirou as ZPEs brasileiras.</p>
+                  </div>
+                </div>
+                <div class="obj-i">
+                  <span class="obj-n">03</span>
+                  <div>
+                    <p class="obj-t">Abrir conversas com a indústria</p>
+                    <p class="obj-d">Fabricantes que procuram produzir no Brasil e exportar a partir do Maranhão.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="msn-k">
+                <div class="kpi anim d3">
+                  <p class="kpi-l">Duração</p>
+                  <p class="kpi-v"><span data-conta="dias">18</span><small>dias</small></p>
+                  <p class="kpi-d">De 10 a 27 de outubro, com ida e volta por Hong Kong.</p>
+                </div>
+                <div class="kpi anim d4">
+                  <p class="kpi-l">Cidades visitadas</p>
+                  <p class="kpi-v"><span data-conta="cidades">4</span></p>
+                  <p class="kpi-d" data-lista-cidades>Guangzhou, Foshan, Zhongshan e Shenzhen.</p>
+                </div>
+                <div class="kpi anim d4">
+                  <p class="kpi-l">Agendas institucionais</p>
+                  <p class="kpi-v"><span data-conta="agendas">7</span></p>
+                  <p class="kpi-d">Feira, plataforma de investimento, portos, zona franca e fábricas.</p>
+                </div>
+                <div class="kpi anim d5">
+                  <p class="kpi-l">Delegação</p>
+                  <p class="kpi-v">4<small>integrantes</small></p>
+                  <p class="kpi-d">Presidência, chefia de gabinete e as engenharias ambiental e civil.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Roteiro consolidado da missão e registros enviados pela delegação.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 5 — ROTEIRO DA MISSÃO (gerado de AGENDA)
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Missão China">
+        <div class="lightmap lightmap-wide" aria-hidden="true">
+          <img src="assets/images/world_dotted.svg" alt="">
+        </div>
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Roteiro</p>
+          <h2 class="title anim d2" style="margin:18px 0 10px;font-size:50px">Do Delta do Rio das Pérolas a <strong
+              style="font-weight:700">Shenzhen</strong></h2>
+          <p class="lede anim d2" style="font-size:20px;margin-bottom:8px">Todas as agendas na província de Guangdong, no sul da China.</p>
+
+          <div class="body">
+            <div class="agd anim d3" id="agenda"></div>
+          </div>
+        </div>
+
+        <div class="foot anim d5">
+          <span class="foot-note">Roteiro China com o Detalhamento das Visitas recebido durante a viagem. Empresas privadas identificadas pelo setor.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 6 — CANTON FAIR
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Guangzhou · Canton Fair</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">A ZPE como <strong
+              style="font-weight:700">porta de entrada</strong> para a América Latina</h2>
+
+          <div class="body">
+            <div class="vis">
+              <div>
+                <p class="vis-t anim d3">Na <b>Feira de Importação e Exportação da China</b>, que reúne fabricantes
+                  chineses e compradores estrangeiros, a delegação conversou com expositores e apresentou a localização,
+                  o acesso ao complexo portuário de São Luís, o regime de exportação e a energia renovável do Maranhão.</p>
+                <div class="vis-chips anim d4">
+                  <span class="vchip">Caminhões e veículos</span>
+                  <span class="vchip">Motocicletas elétricas</span>
+                  <span class="vchip">Perfis de alumínio</span>
+                  <span class="vchip">Energia renovável e armazenamento</span>
+                </div>
+                <div class="qt anim d5">
+                  <p class="qt-t">Vem crescendo um conceito chamado powershoring, que nada mais é do que levar a produção
+                    para onde há energia limpa, abundante, renovável, num local estratégico para alcançar o mercado global.</p>
+                  <p class="qt-a">Rakel Murad · presidente da ZPE Maranhão</p>
+                </div>
+              </div>
+
+              <div class="vis-fotos">
+                <figure class="ph anim d3">
+                  <img src="assets/fotos/canton-estande-caminhoes.jpg" alt="A delegação com expositora em estande de caminhões">
+                  <figcaption>Caminhões</figcaption>
+                </figure>
+                <figure class="ph anim d4">
+                  <img src="assets/fotos/canton-motocicletas-eletricas.jpg" alt="A delegação com expositoras em estande de motocicletas elétricas">
+                  <figcaption>Motocicletas elétricas</figcaption>
+                </figure>
+                <figure class="ph anim d5">
+                  <img src="assets/fotos/canton-energia-renovavel.jpg" alt="Conversa com expositores de energia renovável e armazenamento">
+                  <figcaption>Energia renovável</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Fase 1 da Canton Fair, de 15 a 19 de outubro.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 7 — NANSHA
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Nansha, Guangzhou · 19 de outubro</p>
+          <h2 class="title anim d2" style="margin:18px 0 28px;font-size:50px">Investimento, porto e zona franca <strong
+              style="font-weight:700">no mesmo distrito</strong></h2>
+
+          <div class="body">
+            <div class="ns">
+              <div class="ns-c anim d3">
+                <figure class="ph"><img src="assets/fotos/going-global-apresentacao-zpe.jpg"
+                    alt="A apresentação da ZPE Maranhão na tela da sala de reunião do Going Global Center"></figure>
+                <div class="ns-b">
+                  <p class="ns-k">Going Global Center</p>
+                  <p class="ns-t">Bacabeira apresentada a uma plataforma oficial</p>
+                  <p class="ns-d">Orientada pela Comissão Nacional de Desenvolvimento e Reforma, acompanha empresas
+                    chinesas em todas as etapas de um investimento no exterior.</p>
+                </div>
+              </div>
+              <div class="ns-c anim d4">
+                <figure class="ph"><img src="assets/fotos/nansha-terminal.jpg"
+                    alt="Vista do alto do terminal de contêineres do Porto de Nansha"></figure>
+                <div class="ns-b">
+                  <p class="ns-k">Porto de Nansha · Fase IV</p>
+                  <p class="ns-t">Terminal automatizado, rio, mar e ferrovia</p>
+                  <div class="ns-v"><b>25,4<small>mi</small></b><span>de TEUs movimentados em 2023</span></div>
+                </div>
+              </div>
+              <div class="ns-c anim d5">
+                <figure class="ph"><img src="assets/fotos/zona-franca-fachada.jpg"
+                    alt="A delegação e anfitriões na fachada de um centro de distribuição de comércio eletrônico"></figure>
+                <div class="ns-b">
+                  <p class="ns-k">Zona Franca Integrada</p>
+                  <p class="ns-t">Armazém alfandegado de comércio eletrônico</p>
+                  <div class="ns-v"><b>110<small>mil m²</small></b><span>a 15 minutos dos berços do porto</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ns-call anim d6">
+              <p>Indústria, regime aduaneiro especial e porto: <b>a mesma combinação que a ZPE oferece em
+                  Bacabeira</b>, junto ao complexo portuário de São Luís.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Dados do porto e da zona franca: programação oficial da missão. TEU: contêiner-padrão de 20 pés.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 8 — FABRICANTE DE ALUMÍNIO (FOSHAN)
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="darkmap darkmap-wide" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <div class="body">
+            <div class="alu">
+              <figure class="ph anim d2">
+                <img src="assets/fotos/aluminio-mapa-clientes.jpg"
+                  alt="Integrante da delegação aponta o Brasil no mapa de clientes da fabricante de perfis de alumínio">
+                <figcaption>O Brasil no mapa de clientes da fabricante</figcaption>
+              </figure>
+
+              <div>
+                <p class="eyebrow anim d1" style="margin-bottom:18px">Missão China · Foshan · 20 de outubro</p>
+                <h2 class="title anim d2" style="margin:0 0 16px;font-size:48px">Fabricante de alumínio procura local
+                  para <strong style="font-weight:700">fábrica na América Latina</strong></h2>
+                <p class="vis-t anim d3" style="max-width:56ch;margin-bottom:28px">Perfis para construção civil,
+                  indústria, portas e janelas, em migração para o alumínio industrial: veículos elétricos, energia
+                  solar e eólica, armazenamento de energia e eletrônicos.</p>
+
+                <div class="alu-k anim d4">
+                  <div class="kpi">
+                    <p class="kpi-l">Produção</p>
+                    <p class="kpi-v">600<small>mil t</small></p>
+                    <p class="kpi-d">Mais de 600 mil toneladas por ano.</p>
+                  </div>
+                  <div class="kpi">
+                    <p class="kpi-l">Exportação</p>
+                    <p class="kpi-v">70<small>+</small></p>
+                    <p class="kpi-d">Países e regiões atendidos.</p>
+                  </div>
+                  <div class="kpi">
+                    <p class="kpi-l">Patentes</p>
+                    <p class="kpi-v">1.600<small>+</small></p>
+                    <p class="kpi-d">Incluindo as subsidiárias.</p>
+                  </div>
+                  <div class="kpi">
+                    <p class="kpi-l">Ranking 2025</p>
+                    <p class="kpi-v">3º</p>
+                    <p class="kpi-d">Entre as marcas de alumínio da China.</p>
+                  </div>
+                </div>
+
+                <div class="call anim d5">
+                  <p class="call-l">Oportunidade para a ZPE</p>
+                  <p class="call-t">O Maranhão produz <strong>alumínio primário com certificação ASI</strong> e tem o
+                    complexo portuário: matéria-prima local e incentivos de exportação para uma planta de extrusão
+                    voltada às Américas.</p>
+                </div>
+
+                <p class="alu-note anim d6">Em <b>Zhongshan</b>, integrantes da delegação visitaram também uma fabricante
+                  de louças sanitárias com parque fabril de 200 mil m², que fornece para mais de 150 marcas em mais de 50
+                  países.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Dados repassados pela presidente da ZPE. Empresas identificadas pelo setor de atuação.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 9 — MURAL DA VISITA À FABRICANTE DE ALUMÍNIO
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Foshan · Registro da visita</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Da bauxita ao <strong
+              style="font-weight:700">perfil extrudado</strong></h2>
+
+          <div class="body">
+            <div class="mural">
+              <figure class="ph m-hero anim d3">
+                <img src="assets/fotos/aluminio-grupo-sede.jpg" style="object-position:50% 72%"
+                  alt="A delegação da ZPE e anfitriões no saguão da sede da fabricante">
+                <figcaption>Delegação e anfitriões na sede</figcaption>
+              </figure>
+              <figure class="ph m-wide anim d3">
+                <img src="assets/fotos/aluminio-showroom-cadeia.jpg"
+                  alt="Vitrine do showroom com a cadeia do alumínio, da bauxita ao lingote">
+                <figcaption>Showroom: a cadeia do alumínio</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/aluminio-bauxita.jpg" style="object-position:50% 55%"
+                  alt="Amostra de bauxita no showroom">
+                <figcaption>Bauxita</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/aluminio-barras-extrudadas.jpg" style="object-position:50% 60%"
+                  alt="Barras de alumínio extrudadas no showroom">
+                <figcaption>Barras extrudadas</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/aluminio-fabrica.jpg" style="object-position:50% 62%"
+                  alt="Integrante da delegação de capacete na linha de produção, com perfis pendurados ao fundo">
+                <figcaption>Linha de produção</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/aluminio-carro.jpg" style="object-position:50% 50%"
+                  alt="Integrante da delegação ao lado de um carro com estrutura toda em alumínio">
+                <figcaption>Estrutura de carro em alumínio</figcaption>
+              </figure>
+              <figure class="ph anim d6">
+                <img src="assets/fotos/aluminio-visita-fabrica.jpg" style="object-position:50% 40%"
+                  alt="Duas integrantes da delegação de capacete na fábrica">
+                <figcaption>Visita à fábrica</figcaption>
+              </figure>
+              <figure class="ph anim d6">
+                <img src="assets/fotos/aluminio-mapa-america-do-sul.jpg" style="object-position:50% 45%"
+                  alt="Mapa luminoso da América do Sul com as cidades atendidas pela fabricante">
+                <figcaption>América do Sul</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Showroom e linha de produção da fabricante de perfis de alumínio, em 20 de outubro.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 9 — SHENZHEN · MAWAN
+           =================================================== -->
+      <section class="slide s-dark dots grain" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Shenzhen · Porto de Mawan · 22 de outubro</p>
+          <h2 class="title anim d2" style="margin:18px 0 34px;font-size:50px">Na cidade que inspirou <strong
+              style="font-weight:700">as ZPEs brasileiras</strong></h2>
+
+          <div class="body">
+            <div class="szn">
+              <div>
+                <div class="hist anim d3">
+                  <div class="hist-i">
+                    <p class="hist-y">1980</p>
+                    <p class="hist-t">China cria as primeiras zonas econômicas especiais. Shenzhen é uma delas.</p>
+                  </div>
+                  <div class="hist-i">
+                    <p class="hist-y">1988</p>
+                    <p class="hist-t">O Brasil cria as zonas de processamento de exportação.</p>
+                  </div>
+                  <div class="hist-i">
+                    <p class="hist-y">2024</p>
+                    <p class="hist-t">Decreto Federal nº 12.131 cria a ZPE Maranhão.</p>
+                  </div>
+                  <div class="hist-i">
+                    <p class="hist-y">2026</p>
+                    <p class="hist-t">A ZPE vai a Shenzhen conhecer as práticas de quem opera o modelo.</p>
+                  </div>
+                </div>
+
+                <div class="szn-port anim d4">
+                  <span class="vchip">Primeiro porto inteligente da Grande Baía com 5G</span>
+                  <span class="vchip">Equipamentos operados a distância</span>
+                  <span class="vchip">Caminhões autônomos</span>
+                </div>
+
+                <div class="qt anim d5">
+                  <p class="qt-t">Acreditamos que essa parceria pode ser uma via de mão dupla: a experiência da China e o
+                    potencial do Maranhão, construindo juntos novas oportunidades.</p>
+                  <p class="qt-a">Rakel Murad · presidente da ZPE Maranhão</p>
+                </div>
+              </div>
+
+              <figure class="ph anim d4">
+                <img src="assets/fotos/mawan-delegacao-conteineres.jpg"
+                  alt="A delegação da ZPE Maranhão diante de contêineres empilhados no Porto de Mawan">
+                <figcaption>Porto de Mawan, China Merchants Group</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Mawan: programação oficial da missão. Histórico: narração da presidente gravada em Shenzhen.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 10 — SÍNTESE DA MISSÃO
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Missão China">
+        <div class="lightmap lightmap-wide" aria-hidden="true">
+          <img src="assets/images/world_dotted.svg" alt="">
+        </div>
+        <div class="pad pad-center">
+          <p class="eyebrow anim d1">Missão China · Resultados</p>
+          <h2 class="title anim d2" style="margin:18px 0 34px;font-size:50px">O que a missão <strong
+              style="font-weight:700">deixa encaminhado</strong></h2>
+
+          <div class="body body-top">
+            <div class="leg">
+              <div class="leg-c anim d3">
+                <span class="leg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />
+                  </svg></span>
+                <p class="leg-t">Canal com uma plataforma oficial</p>
+                <p class="leg-d">O Going Global Center conhece Bacabeira e acompanha empresas chinesas que investem no
+                  exterior.</p>
+              </div>
+              <div class="leg-c anim d4">
+                <span class="leg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10" />
+                  </svg></span>
+                <p class="leg-t">Indústria com interesse na região</p>
+                <p class="leg-d">Fabricante de alumínio que procura local na América Latina, além dos expositores
+                  contatados na Canton Fair.</p>
+              </div>
+              <div class="leg-c anim d5">
+                <span class="leg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19h16M6 19V8h4v11M14 19V4h4v15" />
+                  </svg></span>
+                <p class="leg-t">Referências de operação</p>
+                <p class="leg-d">Porto automatizado, operação remota com 5G e armazém alfandegado, para o planejamento
+                  da implantação.</p>
+              </div>
+            </div>
+
+            <div class="flow anim d6">
+              <p class="sub-l">Do contato ao projeto</p>
+              <div class="flow-g">
+                <div class="flow-s">
+                  <p class="flow-n">01</p>
+                  <p class="flow-t">A empresa apresenta o projeto industrial à ZPE</p>
+                </div>
+                <div class="flow-s">
+                  <p class="flow-n">02</p>
+                  <p class="flow-t">A ZPE faz a análise técnica</p>
+                </div>
+                <div class="flow-s">
+                  <p class="flow-n">03</p>
+                  <p class="flow-t">O projeto é encaminhado ao CZPE, em Brasília</p>
+                </div>
+                <div class="flow-s">
+                  <p class="flow-n">04</p>
+                  <p class="flow-t">Aprovado, recebe área e se instala em Bacabeira</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Foi esse o caminho dos quatro projetos já aprovados pelo CZPE.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 11 — CDRU COM A NEXSOLAR
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Parcerias">
+        <div class="darkmap darkmap-wide" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <p class="eyebrow anim d1">Item II · Celebração de parcerias</p>
+          <h2 class="title anim d2" style="margin:18px 0 34px;font-size:50px">CDRU assinada com a <strong
+              style="font-weight:700">NexSolar</strong></h2>
+
+          <div class="body">
+            <div class="cdru">
+              <div class="hero anim d3">
+                <video class="slide-video hero-video" muted loop playsinline preload="none"
+                       poster="assets/videos/video_card_poster.jpg" aria-hidden="true" tabindex="-1"
+                       data-src-webm="assets/videos/video_card_web.webm"
+                       data-src-mp4="assets/videos/video_card_web.mp4"></video>
+                <p class="hero-l">Assinatura</p>
+                <p class="hero-big">23<small>de outubro</small></p>
+                <p class="hero-d">Contrato de concessão de direito real de uso assinado pela presidente da ZPE,
+                  Rakel Murad.</p>
+                <div class="hero-split">
+                  <div>
+                    <p class="hero-s-v">1</p>
+                    <p class="hero-s-l">Empresa com área<br>cedida na ZPE</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fic">
+                <div class="fic-r anim d3">
+                  <span class="fic-k">Instrumento</span>
+                  <p class="fic-v">Concessão de direito real de uso <b>(CDRU)</b>
+                    <small>Outorga de área da ZPE prevista na Política de Alocação de Área.</small></p>
+                </div>
+                <div class="fic-r anim d4">
+                  <span class="fic-k">Concessionária</span>
+                  <p class="fic-v"><b>NexSolar</b></p>
+                </div>
+                <div class="fic-r anim d4">
+                  <span class="fic-k">Concedente</span>
+                  <p class="fic-v">ZPE Maranhão</p>
+                </div>
+                <div class="call anim d5">
+                  <p class="call-l">O que muda</p>
+                  <p class="call-t">A ZPE passa a ter uma <strong>empresa autorizada a se instalar</strong>, com a cessão
+                    da área já formalizada.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Estatuto Social, Art. 3º, V, e Política de Alocação de Área: matérias da reunião extraordinária de 18 de setembro de 2026.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 12 — ABERTURA · ITEM III
+           =================================================== -->
+      <section class="slide s-deep grain" data-bloco="Implantação e CZPE">
+        <div class="enc-bg">
+          <video class="slide-video" muted loop playsinline preload="none"
+                 poster="assets/videos/video_enc_poster.jpg" aria-hidden="true" tabindex="-1"
+                 data-src-webm="assets/videos/video_enc_web.webm"
+                 data-src-mp4="assets/videos/video_enc_web.mp4"></video>
+        </div>
+        <div class="chap">
+          <div>
+            <p class="div-item anim d1">Item III · Relatórios da ZPE</p>
+            <h2 class="chap-title anim d2">Implantação e <strong>projetos no CZPE</strong></h2>
+            <p class="chap-lede anim d3">A <b>comprovação da execução das obras</b> enviada ao Conselho Nacional das
+              Zonas de Processamento de Exportação e a <b>carteira de projetos industriais</b> da ZPE.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 13 — COMPROVAÇÃO DE 10% AO CZPE
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Implantação e CZPE">
+        <div class="darkmap" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad pad-center">
+          <p class="eyebrow anim d1">Item III · Fases de implantação</p>
+          <h2 class="title anim d2" style="margin:18px 0 10px;font-size:50px">Comprovação de <strong
+              style="font-weight:700">10% das obras</strong> enviada ao CZPE</h2>
+          <p class="lede anim d2" style="font-size:20px;margin-bottom:40px;max-width:none">Parte seguiu em 15 de outubro; o
+            restante, em 25 de outubro, quando as informações ficaram completas.</p>
+
+          <div class="body body-top">
+            <div class="etp">
+              <div class="etp-c prev anim d3">
+                <p class="etp-d">Etapa anterior</p>
+                <p class="etp-k">Ofício ao CZPE</p>
+                <p class="etp-t">Início das obras comprovado</p>
+                <p class="etp-x">Enviado com a solicitação de alteração do projeto, no período de novembro de 2025 a
+                  setembro de 2026.</p>
+              </div>
+              <div class="etp-c anim d4">
+                <p class="etp-d">15<small>out</small></p>
+                <p class="etp-k">Ofício ao CZPE · envio parcial</p>
+                <p class="etp-t">EIA/RIMA</p>
+                <p class="etp-x">Estudo e Relatório de Impacto Ambiental, primeira parte da comprovação. As demais
+                  informações ainda estavam em consolidação.</p>
+                <span class="stt stt-ok">Enviado</span>
+              </div>
+              <div class="etp-c hi anim d5">
+                <p class="etp-d">25<small>out</small></p>
+                <p class="etp-k">Complementação</p>
+                <p class="etp-t">Restante da comprovação de 10% da execução da obra</p>
+                <p class="etp-x">Completa a documentação encaminhada em 15 de outubro.</p>
+                <span class="stt stt-ok">Enviado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Informações da Presidência da ZPE Maranhão. Etapa anterior: Relatório Gerencial dos Entregáveis, seção 8.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 14 — CARTEIRA DE PROJETOS
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Implantação e CZPE">
+        <div class="lightmap lightmap-wide" aria-hidden="true">
+          <img src="assets/images/world_dotted.svg" alt="">
+        </div>
+        <div class="pad pad-center">
+          <p class="eyebrow anim d1">Item III · Projetos para o CZPE</p>
+          <h2 class="title anim d2" style="margin:18px 0 32px;font-size:50px">Carteira de <strong
+              style="font-weight:700">projetos industriais</strong></h2>
+
+          <div class="body body-top">
+            <div class="cpj">
+              <div class="cpj-c anim d3">
+                <p class="cpj-v">12</p>
+                <p class="cpj-t">projetos recebidos na ZPE MA</p>
+              </div>
+              <div class="cpj-c anim d3">
+                <p class="cpj-v">5</p>
+                <p class="cpj-t">projetos aprovados na ZPE MA</p>
+              </div>
+              <div class="cpj-c cpj-hi anim d4">
+                <p class="cpj-v">4</p>
+                <p class="cpj-t">projetos aprovados no CZPE</p>
+                <p class="cpj-n">Oil Group · 4Wood Biotech · H2X · Hydeas</p>
+                <div class="cpj-sub">
+                  <p class="cpj-t"><b>1</b> projeto submetido<br>para análise no CZPE</p>
+                  <p class="cpj-n">Florestas Brasileiras</p>
+                </div>
+              </div>
+              <div class="cpj-c anim d4">
+                <p class="cpj-v">7</p>
+                <p class="cpj-t">projetos em análise na ZPE MA</p>
+                <p class="cpj-n">Strongwell · Lumen · SL Energia · Superaço · Grupo Jacaré · BSF São Luís · Pavitecnica</p>
+              </div>
+            </div>
+
+            <div class="frentes anim d5">
+              <p class="sub-l">Frentes da carteira</p>
+              <div class="frentes-g">
+                <div class="frente"><i>01</i><span>Combustíveis sustentáveis</span></div>
+                <div class="frente"><i>02</i><span>Hidrogênio verde e e-metanol</span></div>
+                <div class="frente"><i>03</i><span>Ferro briquetado a quente (HBI) verde</span></div>
+                <div class="frente"><i>04</i><span>Amônia verde</span></div>
+                <div class="frente"><i>05</i><span>Data center verde</span></div>
+                <div class="frente"><i>06</i><span>Biomassa e babaçu</span></div>
+                <div class="frente"><i>07</i><span>Madeira</span></div>
+                <div class="frente"><i>08</i><span>Máquinas agrícolas</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Posição do Relatório Gerencial dos Entregáveis (novembro de 2025 a setembro de 2026), seções 1.6 e 2.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE 15 — ENCERRAMENTO
+           =================================================== -->
+      <section class="slide capa grain" data-bloco="Encerramento">
+        <div class="capa-bg"><img src="assets/images/bg_hero_blue_compressed.jpg" alt="" loading="lazy"></div>
+        <div class="capa-veil"></div>
+        <img class="capa-world" src="assets/images/world_dotted.svg" alt="">
+
+        <div class="end-inner">
+          <p class="capa-kicker anim d1">Síntese</p>
+          <h2 class="capa-title anim d2" style="font-size:62px">Parcerias abertas, <strong>implantação em curso</strong>
+          </h2>
+
+          <div class="end-k end-k5">
+            <div class="anim d3">
+              <p class="end-k-v" data-conta="agendas">7</p>
+              <p class="end-k-d">Agendas institucionais na Missão China</p>
+            </div>
+            <div class="anim d3">
+              <p class="end-k-v">1</p>
+              <p class="end-k-d">CDRU assinada, com a NexSolar</p>
+            </div>
+            <div class="anim d3">
+              <p class="end-k-v">10<small>%</small></p>
+              <p class="end-k-d">Comprovação de execução das obras enviada ao CZPE</p>
+            </div>
+            <div class="anim d4">
+              <p class="end-k-v">4</p>
+              <p class="end-k-d">Projetos aprovados no CZPE e 1 submetido</p>
+            </div>
+            <div class="anim d4">
+              <p class="end-k-v"><em>R$</em>31,2<small>bi</small></p>
+              <p class="end-k-d">Investimentos dos projetos aprovados no CZPE</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="capa-logos anim d7">
+          <img src="assets/logos/zpe_white.png" alt="ZPE Maranhão">
+          <span class="sep"></span>
+          <img src="assets/logos/investe-ma-logo-branco.png" alt="Investe Maranhão">
+          <span class="sep gov-brand"></span>
+          <img class="gov-brand" src="assets/logos/governo-ma-logo.png" alt="Governo do Maranhão">
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===================================================
+       CHROME
+       =================================================== -->
+  <div id="loader">
+    <img src="assets/logos/zpe_white.png" alt="ZPE Maranhão">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:15px">
+      <div class="ld-track">
+        <div class="ld-bar" id="ldBar"></div>
+      </div>
+      <span class="ld-txt">Carregando apresentação</span>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button id="btnIdx" aria-label="Índice de slides" title="Índice (G)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    </button>
+    <button id="btnFs" aria-label="Tela cheia" title="Tela cheia (F)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" />
+      </svg>
+    </button>
+  </div>
+
+  <button class="tarrow tprev" id="tPrev" aria-label="Anterior">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  </button>
+  <button class="tarrow tnext" id="tNext" aria-label="Próximo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  </button>
+
+  <div class="idx" id="idx">
+    <p class="idx-h">Índice da apresentação</p>
+    <div class="idx-grid" id="idxGrid"></div>
+  </div>
+
+  <div class="hud" id="hud">
+    <span class="hud-bloco" id="hudBloco"></span>
+    <div class="hud-dots" id="hudDots"></div>
+    <span class="hud-sp"></span>
+    <span class="hud-c" id="hudC"></span>
+  </div>
+  <div class="progress" id="prog"></div>
+
+  <script>
+    'use strict';
+
+    /* =========================================================
+       ESCALA DO STAGE — 1920×1080 ajustado ao viewport
+       Mesmo contrato do deck do CONSAD: escala SEMPRE pela largura.
+       O slide encosta nas duas bordas laterais em qualquer janela e,
+       como o scale é uniforme, o 16:9 nunca distorce. A faixa vertical
+       que sobra recebe o fundo do slide ativo (sincronizarFundo).
+       ========================================================= */
+    const stage = document.getElementById('stage');
+    const viewport = document.getElementById('viewport');
+
+    function fitStage() {
+      const vw = viewport.clientWidth;
+      const vh = viewport.clientHeight;
+      const scale = vw / 1920;
+      const x = (vw - 1920 * scale) / 2;
+      const y = (vh - 1080 * scale) / 2;
+      stage.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    }
+    fitStage();
+    window.addEventListener('resize', fitStage);
+    document.addEventListener('fullscreenchange', () => setTimeout(fitStage, 60));
+
+    /* =========================================================
+       AGENDA DA MISSÃO CHINA — fonte única de verdade
+       Monta o slide de roteiro e alimenta as contagens ([data-conta]).
+       Base: ROTEIRO_CONSOLIDADO.md da cobertura (atualizado em 22/10).
+       ok: false = agenda prevista sem confirmação da delegação. Fica
+       fora do slide e das contagens; ao confirmar, troque para true.
+       Empresas privadas aparecem pelo setor (orientação da presidente).
+       ========================================================= */
+    const AGENDA = [
+      {
+        d: '10 a 14 out', c: 'Viagem de ida', via: true, itens: [
+          { t: 'São Luís, São Paulo, Doha e Hong Kong', ok: true },
+          { t: 'Trem-bala de Hong Kong a Guangzhou', ok: true }
+        ]
+      },
+      {
+        d: '15 a 19 out', c: 'Guangzhou', itens: [
+          { t: 'Canton Fair, Fase 1: reuniões com expositores', cidade: 'Guangzhou', ok: true }
+        ]
+      },
+      {
+        d: '19 out', c: 'Nansha, Guangzhou', itens: [
+          { t: 'Going Global Center, plataforma oficial de investimento', cidade: 'Guangzhou', ok: true },
+          { t: 'Porto de Nansha, terminal automatizado', cidade: 'Guangzhou', ok: true },
+          { t: 'Centro de e-commerce na Zona Franca Integrada', cidade: 'Guangzhou', ok: true }
+        ]
+      },
+      {
+        d: '20 out', c: 'Foshan e Zhongshan', itens: [
+          { t: 'Fabricante de perfis de alumínio', cidade: 'Foshan', ok: true },
+          { t: 'Fabricante de louças sanitárias', cidade: 'Zhongshan', ok: true }
+        ]
+      },
+      {
+        d: '21 out', c: 'Zhuhai', itens: [
+          { t: 'Fabricante de ar-condicionado', cidade: 'Zhuhai', ok: false },
+          { t: 'Porto de Gaolan e Zona Franca', cidade: 'Zhuhai', ok: false }
+        ]
+      },
+      {
+        c: 'Shenzhen', itens: [
+          { t: 'Operadora logística de cargas de projeto', dia: '22', cidade: 'Shenzhen', ok: false },
+          { t: 'Porto inteligente de Mawan', dia: '22', cidade: 'Shenzhen', ok: true },
+          { t: 'Porto de Yantian, com linha regular para o Brasil', dia: '23', cidade: 'Shenzhen', ok: false },
+          { t: 'Fabricante de robôs humanoides', dia: '23', cidade: 'Shenzhen', ok: false }
+        ]
+      },
+      {
+        d: '26 e 27 out', c: 'Retorno', via: true, itens: [
+          { t: 'Hong Kong, Doha, São Paulo e São Luís', ok: true }
+        ]
+      }
+    ];
+
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const listaPt = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' e ' + a[a.length - 1];
+
+    const paradas = AGENDA
+      .map(p => ({ ...p, itens: p.itens.filter(i => i.ok) }))
+      .filter(p => p.itens.length);
+
+    const realizadas = paradas.filter(p => !p.via).flatMap(p => p.itens);
+    const cidades = [...new Set(realizadas.map(i => i.cidade).filter(Boolean))];
+
+    const CONTA = {
+      dias: 18,                       // 10 a 27 de outubro, inclusive
+      cidades: cidades.length,
+      agendas: realizadas.length
+    };
+
+    (function montarAgenda() {
+      const alvo = document.getElementById('agenda');
+      if (!alvo) return;
+      alvo.innerHTML = paradas.map(p => {
+        const dias = [...new Set(p.itens.map(i => i.dia).filter(Boolean))];
+        const data = p.d || (listaPt(dias) + ' out');
+        return '<div class="agd-s' + (p.via ? ' via' : '') + '">'
+          + '<p class="agd-d">' + esc(data) + '</p>'
+          + '<p class="agd-c">' + esc(p.c) + '</p>'
+          + '<ul class="agd-l">' + p.itens.map(i => '<li>' + esc(i.t) + '</li>').join('') + '</ul>'
+          + '</div>';
+      }).join('');
+    })();
+
+    // Preenche os números dos slides a partir da AGENDA. O valor escrito
+    // no HTML é só fallback (posição com as agendas confirmadas em 22/10).
+    document.querySelectorAll('[data-conta]').forEach(el => {
+      const n = CONTA[el.dataset.conta];
+      if (n === undefined) { console.warn('[conta] chave desconhecida:', el.dataset.conta); return; }
+      el.textContent = n;
+    });
+    document.querySelectorAll('[data-lista-cidades]').forEach(el => { el.textContent = listaPt(cidades) + '.'; });
+
+    // Largura final já no carregamento: a animação só mexe no scaleX
+    document.querySelectorAll('.fill[data-w]').forEach(el => { el.style.width = el.dataset.w + '%'; });
+
+    /* =========================================================
+       TÍTULOS DE SLIDE (índice + HUD)
+       ========================================================= */
+    const TITULOS = [
+      'Capa', 'Pauta da apresentação',
+      'Missão China', 'Missão: objetivos e números', 'Missão: roteiro',
+      'Canton Fair', 'Nansha: investimento, porto e zona franca', 'Foshan: fabricante de alumínio', 'Foshan: registro da visita',
+      'Shenzhen: Porto de Mawan', 'Missão: resultados',
+      'CDRU com a NexSolar',
+      'Implantação e projetos no CZPE', 'Comprovação de 10% ao CZPE', 'Carteira de projetos',
+      'Encerramento'
+    ];
+    document.querySelectorAll('.slide').forEach((sl, i) => { sl.dataset.titulo = TITULOS[i] || ''; });
+
+    /* =========================================================
+       ESTADO E NAVEGAÇÃO
+       ========================================================= */
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const total = slides.length;
+    let cur = 0;
+    let moving = false;
+
+    if (TITULOS.length !== total) console.warn('[titulos]', TITULOS.length, 'títulos para', total, 'slides');
+
+    const hud = document.getElementById('hud');
+    const hudBloco = document.getElementById('hudBloco');
+    const hudDots = document.getElementById('hudDots');
+    const hudC = document.getElementById('hudC');
+    const prog = document.getElementById('prog');
+    const idx = document.getElementById('idx');
+    const idxGrid = document.getElementById('idxGrid');
+
+    // Data e título na capa
+    const capaData = document.getElementById('capaData');
+    if (capaData) {
+      if (DATA_APRESENTACAO) capaData.textContent = DATA_APRESENTACAO;
+      else capaData.style.display = 'none';
+    }
+
+    // Dots do HUD
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.className = 'hud-dot' + (i === 0 ? ' on' : '');
+      b.setAttribute('aria-label', 'Slide ' + (i + 1));
+      b.addEventListener('click', e => { e.stopPropagation(); go(i); });
+      hudDots.appendChild(b);
+    });
+
+    // Índice
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.className = 'idx-i' + (i === 0 ? ' on' : '');
+      b.innerHTML = `<span class="idx-n">${String(i + 1).padStart(2, '0')}</span><span>${slides[i].dataset.titulo || ''}</span>`;
+      b.addEventListener('click', e => { e.stopPropagation(); go(i); closeIdx(); });
+      idxGrid.appendChild(b);
+    });
+
+    /* Faixas fora do stage acompanham o tema do slide ativo */
+    function sincronizarFundo() {
+      const sl = slides[cur];
+      viewport.classList.toggle('vp-light', sl.classList.contains('s-light'));
+      viewport.classList.toggle('vp-deep', sl.classList.contains('s-deep'));
+      viewport.classList.toggle('vp-capa', sl.classList.contains('capa'));
+      document.body.style.background =
+        sl.classList.contains('s-light') ? '#f4f7fc' : '#050b18';
+      sincronizarVideos(sl);
+    }
+
+    /* =========================================================
+       VÍDEOS DE FUNDO
+       Mesmo orçamento de memória do CONSAD: só a capa nasce com
+       autoplay. Os demais (aberturas de capítulo e o card da CDRU)
+       têm preload="none" e as URLs em data-src-*; as <source> são
+       montadas quando o slide entra e removidas quando sai. Pausar
+       não basta: no iOS o quadro decodificado continua em memória
+       e o Safari derruba a aba ("Um problema ocorreu repetidamente").
+       ========================================================= */
+    const slideVideos = Array.from(document.querySelectorAll('.slide-video'));
+
+    function montarFontes(v) {
+      if (v.dataset.montado || !v.dataset.srcWebm) return;
+      v.dataset.montado = '1';
+      [['srcWebm', 'video/webm'], ['srcMp4', 'video/mp4']].forEach(([chave, tipo]) => {
+        if (!v.dataset[chave]) return;
+        const src = document.createElement('source');
+        src.src = v.dataset[chave];
+        src.type = tipo;
+        v.appendChild(src);
+      });
+      v.load();
+    }
+
+    function descarregarVideo(v) {
+      if (!v.dataset.montado) return;
+      v.pause();
+      v.removeAttribute('src');
+      while (v.firstChild) v.removeChild(v.firstChild);
+      v.load();                       // confirma o descarte do buffer
+      v.classList.remove('is-playing');
+      delete v.dataset.montado;
+    }
+
+    /* Os vídeos tocam mesmo com prefers-reduced-motion: são fundo
+       ambiente, sem som, e o PC de apresentação tem "Efeitos de
+       animação" desligado no Windows (pedido do cliente). */
+    function sincronizarVideos(slide) {
+      slideVideos.forEach(v => {
+        if (slide && slide.contains(v)) {
+          montarFontes(v);
+          const p = v.play();
+          if (p && p.catch) p.catch(() => v.classList.remove('is-playing'));
+        } else if (v.id === 'capaVideo') {
+          v.pause();                  // a capa fica carregada: volta-se a ela
+        } else {
+          descarregarVideo(v);
+        }
+      });
+    }
+
+    slideVideos.forEach(v => {
+      // Só revela o vídeo quando há quadro real na tela
+      const revelar = () => v.classList.add('is-playing');
+      v.addEventListener('playing', revelar);
+      v.addEventListener('error', () => v.classList.remove('is-playing'));
+      // O autoplay da capa pode começar antes deste script rodar
+      if (v.readyState >= 3 && !v.paused) revelar();
+    });
+
+    function updateChrome() {
+      sincronizarFundo();
+      hudBloco.textContent = slides[cur].dataset.bloco || '';
+      hudC.textContent = String(cur + 1).padStart(2, '0') + ' / ' + total;
+      prog.style.width = ((cur + 1) / total * 100) + '%';
+      hudDots.querySelectorAll('.hud-dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+      idxGrid.querySelectorAll('.idx-i').forEach((d, i) => d.classList.toggle('on', i === cur));
+    }
+
+    /* Animações que só disparam quando o slide entra */
+    function runSlideAnimations(slide) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Barras
+      slide.querySelectorAll('.fill[data-w]').forEach((el, i) => {
+        el.style.width = el.dataset.w + '%';
+        el.style.transform = 'scaleX(0)';
+        setTimeout(() => { el.style.transform = 'scaleX(1)'; }, reduce ? 0 : 420 + i * 110);
+      });
+
+      // Contadores
+      slide.querySelectorAll('[data-alvo]').forEach(el => {
+        const alvo = parseFloat(el.dataset.alvo);
+        const dec = parseInt(el.dataset.dec || '0', 10);
+        const fmt = v => v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+        if (reduce) { el.textContent = fmt(alvo); return; }
+        el.textContent = fmt(0);
+        const dur = 1000, t0 = performance.now() + 320;
+        function tick(now) {
+          const p = Math.max(0, Math.min((now - t0) / dur, 1));
+          el.textContent = fmt(alvo * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
+    function go(n) {
+      if (moving || n === cur || n < 0 || n >= total) return;
+      moving = true;
+
+      const oldS = slides[cur];
+      const newS = slides[n];
+
+      oldS.classList.add('s-exit');
+      setTimeout(() => {
+        oldS.classList.remove('active', 's-exit');
+        cur = n;
+
+        // Reinicia as animações de reveal do novo slide
+        newS.querySelectorAll('.anim').forEach(el => {
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = '';
+        });
+
+        newS.classList.add('active', 's-enter');
+        updateChrome();
+        runSlideAnimations(newS);
+
+        setTimeout(() => {
+          newS.classList.remove('s-enter');
+          moving = false;
+        }, 540);
+      }, 300);
+    }
+
+    const next = () => go(cur + 1);
+    const prev = () => go(cur - 1);
+
+    /* =========================================================
+       HUD — aparece ao mover o mouse perto da base
+       ========================================================= */
+    let hudT;
+    function showHud() {
+      hud.classList.add('on');
+      clearTimeout(hudT);
+      hudT = setTimeout(() => hud.classList.remove('on'), 2600);
+    }
+    document.addEventListener('mousemove', e => {
+      if (e.clientY > window.innerHeight - 120) showHud();
+    });
+
+    /* =========================================================
+       ÍNDICE
+       ========================================================= */
+    function openIdx() { idx.classList.add('on'); }
+    function closeIdx() { idx.classList.remove('on'); }
+    function toggleIdx() { idx.classList.toggle('on'); }
+    document.getElementById('btnIdx').addEventListener('click', e => { e.stopPropagation(); toggleIdx(); });
+    idx.addEventListener('click', e => { if (e.target === idx) closeIdx(); });
+
+    /* =========================================================
+       FULLSCREEN
+       ========================================================= */
+    function toggleFs() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => { });
+      else document.exitFullscreen().catch(() => { });
+    }
+    document.getElementById('btnFs').addEventListener('click', e => { e.stopPropagation(); toggleFs(); });
+
+    /* =========================================================
+       TECLADO
+       ========================================================= */
+    document.addEventListener('keydown', e => {
+      if (idx.classList.contains('on')) {
+        if (e.key === 'Escape' || e.key === 'g' || e.key === 'G') { e.preventDefault(); closeIdx(); }
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': case ' ':
+          e.preventDefault(); next(); showHud(); break;
+        case 'ArrowLeft': case 'PageUp':
+          e.preventDefault(); prev(); showHud(); break;
+        case 'Home': e.preventDefault(); go(0); break;
+        case 'End': e.preventDefault(); go(total - 1); break;
+        case 'f': case 'F': toggleFs(); break;
+        case 'g': case 'G': e.preventDefault(); openIdx(); break;
+      }
+    });
+
+    /* =========================================================
+       CLIQUE E TOQUE
+       ========================================================= */
+    viewport.addEventListener('click', e => {
+      if (e.target.closest('button, a')) return;
+      if (e.clientX > window.innerWidth / 2) next(); else prev();
+    });
+    document.getElementById('tPrev').addEventListener('click', e => { e.stopPropagation(); prev(); });
+    document.getElementById('tNext').addEventListener('click', e => { e.stopPropagation(); next(); });
+
+    let tsx = 0, tsy = 0;
+    document.addEventListener('touchstart', e => {
+      tsx = e.changedTouches[0].clientX;
+      tsy = e.changedTouches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tsx;
+      const dy = e.changedTouches[0].clientY - tsy;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) { dx < 0 ? next() : prev(); }
+    }, { passive: true });
+
+    /* =========================================================
+       PRELOADER
+       As fotos da missão entram na lista: chegam pelo WhatsApp em
+       JPEG leve (~200 KB cada) e não podem aparecer carregando
+       no meio da reunião.
+       ========================================================= */
+    (function () {
+      const assets = [
+        'assets/videos/video_capa_poster.jpg',
+        'assets/images/bg_hero_blue_compressed.jpg',
+        'assets/images/world_dotted.svg',
+        'assets/logos/zpe_white.png',
+        'assets/logos/investe-ma-logo-branco.png',
+        'assets/logos/governo-ma-logo.png',
+        ...[...document.querySelectorAll('.ph img')].map(i => i.getAttribute('src'))
+      ];
+      const bar = document.getElementById('ldBar');
+      const loader = document.getElementById('loader');
+      const vid = document.getElementById('capaVideo');
+
+      // O vídeo da capa conta como mais um asset: a capa não deve aparecer
+      // antes dele. new Image() não serve aqui, então tem slot próprio.
+      const totalAssets = assets.length + (vid ? 1 : 0);
+      let loaded = 0, done = false;
+
+      function bump() {
+        loaded++;
+        bar.style.width = Math.round(loaded / totalAssets * 100) + '%';
+        if (loaded >= totalAssets) finish();
+      }
+
+      function finish() {
+        if (done) return;
+        done = true;
+        bar.style.width = '100%';
+        setTimeout(() => {
+          loader.classList.add('off');
+          updateChrome();
+          runSlideAnimations(slides[0]);
+          showHud();
+        }, 260);
+      }
+
+      assets.forEach(src => {
+        const img = new Image();
+        img.onload = bump;
+        img.onerror = bump;
+        img.src = src;
+      });
+
+      if (vid) {
+        let vidDone = false;
+        const vidBump = () => { if (!vidDone) { vidDone = true; bump(); } };
+        if (vid.readyState >= 3) vidBump();
+        else {
+          vid.addEventListener('canplaythrough', vidBump, { once: true });
+          vid.addEventListener('error', vidBump, { once: true });
+        }
+        // O vídeo é o asset mais pesado: não pode segurar o deck sozinho
+        setTimeout(vidBump, 4000);
+      }
+
+      // Rede lenta ou asset ausente não pode travar a apresentação
+      setTimeout(finish, 6000);
+    })();
+  </script>
+</body>
+
+</html>
