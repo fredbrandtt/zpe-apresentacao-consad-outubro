@@ -57,7 +57,7 @@ const server = http.createServer((req, res) => {
 
   // Chrome de apresentação não entra no PDF
   await page.addStyleTag({ content: `
-    #loader, .ctrl, .hud, .progress, .idx, .dw, .dw-back { display: none !important; }
+    #loader, .ctrl, .hud, .progress, .idx, .lb, .dw, .dw-back { display: none !important; }
     html, body { cursor: none !important; }
   ` });
   await page.mouse.move(W / 2, 10);

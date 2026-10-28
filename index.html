@@ -4245,7 +4245,7 @@
       display: grid;
       grid-template-columns: 58px 1fr;
       gap: 22px;
-      padding: 26px 0;
+      padding: 20px 0;
       border-bottom: 1px solid var(--hair);
     }
 
@@ -4410,8 +4410,13 @@
       background: var(--green-pressed);
     }
 
-    .agd-s.via .agd-l li::before {
+    .agd-s.via .agd-l li::before,
+    .agd-l li.via::before {
       background: #9aa9c4;
+    }
+
+    .agd-l li.via {
+      color: var(--ink-mute);
     }
 
     /* ===========================================================
@@ -4815,6 +4820,96 @@
     }
 
     /* ===========================================================
+       HENGQIN — CECPS: texto, números e foto
+       =========================================================== */
+    .cec {
+      display: grid;
+      grid-template-columns: 1fr 640px;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .cec-lede {
+      font-size: 20px;
+      line-height: 1.6;
+      color: var(--w-60);
+    }
+
+    .cec-lede b {
+      font-weight: 600;
+      color: var(--w-100);
+    }
+
+    .cec-k {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .cec-k .kpi {
+      padding: 24px 22px 22px;
+    }
+
+    .cec-call {
+      margin-top: 26px;
+      padding: 22px 28px 22px;
+      border-left: 3px solid var(--green);
+      background: linear-gradient(90deg, rgba(36, 69, 130, .26) 0%, rgba(36, 69, 130, 0) 100%);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .cec-call-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .cec-call-t {
+      margin-top: 10px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 22px;
+      line-height: 1.4;
+      color: var(--w-80);
+    }
+
+    .cec-call-t b {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* Foto de grupo deitada (3:2), no formato original */
+    .cec-foto {
+      aspect-ratio: 3 / 2;
+    }
+
+    /* Espaço reservado para foto ainda não recebida */
+    .ph-vazio {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .03);
+      box-shadow: none;
+      border: 1.5px dashed var(--hair-strong);
+    }
+
+    .ph-vazio::after {
+      display: none;
+    }
+
+    .ph-vazio span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--w-45);
+    }
+
+    /* ===========================================================
        SÍNTESE DA MISSÃO — o que fica + do contato ao projeto (claro)
        =========================================================== */
     .leg {
@@ -4995,6 +5090,168 @@
     }
 
     /* ===========================================================
+       CDRU — como a ZPE recebe: três fases + total + serviços (claro)
+       =========================================================== */
+    .rcb {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .rcb-f {
+      position: relative;
+      border-radius: 18px;
+      padding: 28px 30px 26px;
+      background: var(--canvas);
+      border: 1px solid #dfe5f1;
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .05), 0 6px 20px rgba(36, 69, 130, .05);
+    }
+
+    /* Seta entre as fases */
+    .rcb-f+.rcb-f::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid var(--green-deep);
+      border-right: 2px solid var(--green-deep);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    /* Fase condicional: só existe se a obra atrasar */
+    .rcb-cond {
+      background: transparent;
+      border-style: dashed;
+      border-color: #b9c5dc;
+      box-shadow: none;
+    }
+
+    .rcb-cheia {
+      border-color: rgba(76, 172, 75, .5);
+      box-shadow: 0 1px 2px rgba(36, 69, 130, .06), 0 10px 28px rgba(76, 172, 75, .14);
+    }
+
+    .rcb-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #24651f;
+    }
+
+    .rcb-cond .rcb-n {
+      color: var(--ink-mute);
+    }
+
+    .rcb-v {
+      margin-top: 14px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: var(--blue-deep);
+      white-space: nowrap;
+    }
+
+    .rcb-v small {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--ink-mute);
+      margin-left: 4px;
+    }
+
+    .rcb-p {
+      margin-top: 14px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    .rcb-b {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+    }
+
+    .rcb-tot {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      padding: 28px 34px;
+      border-radius: 18px;
+      background: linear-gradient(168deg, var(--blue) 0%, var(--blue-darkest) 100%);
+      box-shadow: 0 2px 6px rgba(36, 69, 130, .18), 0 14px 32px rgba(36, 69, 130, .16);
+    }
+
+    .rcb-tot-v {
+      flex: none;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .rcb-tot-v small {
+      display: block;
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--w-60);
+    }
+
+    .rcb-tot-d {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--w-80);
+    }
+
+    .rcb-tot-d b {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .rcb-svc {
+      padding: 24px 30px;
+      border-radius: 18px;
+      border: 1.5px dashed #b9c5dc;
+    }
+
+    .rcb-svc-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    .rcb-svc-t {
+      margin-top: 10px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 21px;
+      line-height: 1.35;
+      color: var(--blue-deep);
+    }
+
+    .rcb-svc-d {
+      margin-top: 8px;
+      font-size: 15.5px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    /* ===========================================================
        CZPE — comprovação de 10% das obras em etapas
        =========================================================== */
     .etp {
@@ -5107,6 +5364,238 @@
       grid-template-columns: repeat(5, 1fr);
     }
 
+    /* ===========================================================
+       HONG KONG — texto à esquerda, duas fotos no formato original
+       (uma deitada, 16:9, e uma em pé, 9:16), sem corte
+       =========================================================== */
+    .hk {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .hk-fotos {
+      display: flex;
+      gap: 16px;
+      height: 460px;
+    }
+
+    .hk-fotos .ph {
+      height: 100%;
+    }
+
+    .hk-wide {
+      aspect-ratio: 16 / 9;
+    }
+
+    .hk-alta {
+      aspect-ratio: 9 / 16;
+    }
+
+    .hk .vis-chips {
+      margin-top: 30px;
+    }
+
+    /* ===========================================================
+       CANTON FAIR — quatro fotos: duas altas e duas empilhadas
+       =========================================================== */
+    .vis-fotos.vf4 {
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .vf4 .vf-alta {
+      grid-row: span 2;
+    }
+
+    /* ===========================================================
+       MURAIS DE 7 E 6 COLUNAS — Nansha (10 fotos) e Shenzhen (5)
+       Na grade de 7, a célula 1×1 já sai em 3:4, o formato das fotos.
+       Em Shenzhen, a foto de grupo (16:9) ocupa 4×2.
+       =========================================================== */
+    .mural.mural-7 {
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(2, 290px);
+    }
+
+    .mural.mural-szm {
+      grid-template-rows: repeat(2, 290px);
+    }
+
+    .mural .m-hero4 {
+      grid-column: span 4;
+      grid-row: span 2;
+    }
+
+    /* Coluna alta (1×2), para foto em pé estreita */
+    .mural .m-alta {
+      grid-row: span 2;
+    }
+
+    .mural-7 figcaption,
+    .mural-szm figcaption {
+      padding: 36px 14px 12px;
+      font-size: 11px;
+    }
+
+    /* ===========================================================
+       OUTROS REGISTROS — fotos no formato original, numa faixa
+       =========================================================== */
+    .mreg {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      height: 440px;
+    }
+
+    .mreg .ph {
+      height: 100%;
+    }
+
+    .mreg .r-34 {
+      aspect-ratio: 3 / 4;
+    }
+
+    .mreg .r-23 {
+      aspect-ratio: 2 / 3;
+    }
+
+    .mreg .r-43 {
+      aspect-ratio: 4 / 3;
+    }
+
+    /* ===========================================================
+       FOTO AMPLIADA — clique numa foto abre a imagem inteira, sem o
+       corte da moldura. Fica fora do palco, como o índice.
+       =========================================================== */
+    .ph:not(.ph-vazio) img {
+      cursor: zoom-in;
+    }
+
+    .lb {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 96px 32px;
+      background: rgba(5, 11, 24, .95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s var(--ease), visibility .28s var(--ease);
+    }
+
+    .lb.on {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lb-f {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      max-width: 100%;
+      max-height: 100%;
+      transform: scale(.97);
+      transition: transform .32s var(--ease);
+    }
+
+    .lb.on .lb-f {
+      transform: none;
+    }
+
+    .lb-f img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 160px);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, .5);
+    }
+
+    .lb-cap {
+      max-width: 80ch;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, .72);
+    }
+
+    .lb-cap b {
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .lb-cap b:empty {
+      display: none;
+    }
+
+    .lb-n {
+      position: absolute;
+      top: 26px;
+      left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      color: rgba(255, 255, 255, .5);
+    }
+
+    .lb-b {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+      cursor: pointer;
+      transition: background .2s var(--ease);
+    }
+
+    .lb-b:hover {
+      background: rgba(255, 255, 255, .14);
+    }
+
+    .lb-b svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .lb-x {
+      top: 20px;
+      right: 24px;
+    }
+
+    .lb-p {
+      left: 24px;
+      top: 50%;
+      margin-top: -26px;
+    }
+
+    .lb-s {
+      right: 24px;
+      top: 50%;
+      margin-top: -26px;
+    }
+
+    .lb.so .lb-p,
+    .lb.so .lb-s,
+    .lb.so .lb-n {
+      display: none;
+    }
+
   </style>
 </head>
 
@@ -5172,13 +5661,13 @@
               <div class="pauta-row anim d3">
                 <span class="pauta-n">01</span>
                 <span class="pauta-t">Missão China
-                  <small>Canton Fair, plataforma oficial de investimento, portos, zona franca e fábricas em Guangdong</small></span>
+                  <small>Canton Fair, agências de investimento, portos, zonas francas e fábricas no sul da China</small></span>
                 <span class="tag tag-item">Item II</span>
               </div>
               <div class="pauta-row anim d4">
                 <span class="pauta-n">02</span>
                 <span class="pauta-t">CDRU com a NexSolar
-                  <small>Concessão de direito real de uso assinada em 23 de outubro</small></span>
+                  <small>Concessão de direito real de uso do projeto H2X, assinada em 16 de outubro</small></span>
                 <span class="tag tag-item">Item II</span>
               </div>
               <div class="pauta-row anim d5">
@@ -5216,17 +5705,17 @@
           <div>
             <p class="div-item anim d1">Item II · Ações comerciais e reuniões estratégicas</p>
             <h2 class="chap-title anim d2">Missão <strong>China</strong></h2>
-            <p class="chap-lede anim d3">De <b>10 a 27 de outubro de 2026</b>, a delegação da ZPE percorreu a província de
-              Guangdong para <b>apresentar Bacabeira a investidores</b> e conhecer portos, zonas francas e fábricas.</p>
+            <p class="chap-lede anim d3">De <b>10 a 27 de outubro de 2026</b>, a delegação da ZPE percorreu Hong Kong e a
+              província de Guangdong para <b>apresentar Bacabeira a investidores</b> e conhecer portos, zonas francas e fábricas.</p>
             <div class="chap-team anim d4">
               <span class="chap-k">Delegação</span>
-              <span class="chap-names">Rakel Murad<i>·</i>Liana Baker<i>·</i>Larissa Sabadini<i>·</i>Roniele Aquino</span>
+              <span class="chap-names">Rakel Murad<i>·</i>Roniele Aquino</span>
             </div>
           </div>
           <figure class="ph anim d4">
-            <img src="assets/fotos/canton-delegacao-bandeira-vertical.jpg"
-              alt="A delegação da ZPE Maranhão com a bandeira do estado na Canton Fair">
-            <figcaption>Canton Fair, Guangzhou</figcaption>
+            <img src="assets/fotos/mawan-terminal-vertical.jpg"
+              alt="Pórtico e pilhas de contêineres no terminal do Porto de Mawan, em Shenzhen">
+            <figcaption>Porto de Mawan, Shenzhen</figcaption>
           </figure>
         </div>
       </section>
@@ -5252,12 +5741,19 @@
                   <span class="obj-n">01</span>
                   <div>
                     <p class="obj-t">Apresentar a ZPE de Bacabeira</p>
-                    <p class="obj-d">A investidores, expositores e a uma plataforma oficial chinesa de apoio ao
-                      investimento no exterior.</p>
+                    <p class="obj-d">A investidores e expositores da Canton Fair e aos anfitriões de cada visita.</p>
                   </div>
                 </div>
                 <div class="obj-i">
                   <span class="obj-n">02</span>
+                  <div>
+                    <p class="obj-t">Agenda institucional com agências de investimento</p>
+                    <p class="obj-d">Going Global Center, em Nansha, e CECPS, em Hengqin, além do Consulado-Geral do
+                      Brasil em Hong Kong.</p>
+                  </div>
+                </div>
+                <div class="obj-i">
+                  <span class="obj-n">03</span>
                   <div>
                     <p class="obj-t">Conhecer quem opera o modelo há décadas</p>
                     <p class="obj-d">Portos automatizados, zona franca integrada e a cidade onde nasceu o modelo que
@@ -5265,7 +5761,7 @@
                   </div>
                 </div>
                 <div class="obj-i">
-                  <span class="obj-n">03</span>
+                  <span class="obj-n">04</span>
                   <div>
                     <p class="obj-t">Abrir conversas com a indústria</p>
                     <p class="obj-d">Fabricantes que procuram produzir no Brasil e exportar a partir do Maranhão.</p>
@@ -5281,18 +5777,18 @@
                 </div>
                 <div class="kpi anim d4">
                   <p class="kpi-l">Cidades visitadas</p>
-                  <p class="kpi-v"><span data-conta="cidades">4</span></p>
-                  <p class="kpi-d" data-lista-cidades>Guangzhou, Foshan, Zhongshan e Shenzhen.</p>
+                  <p class="kpi-v"><span data-conta="cidades">6</span></p>
+                  <p class="kpi-d" data-lista-cidades>Hong Kong, Guangzhou, Foshan, Zhongshan, Zhuhai e Shenzhen.</p>
                 </div>
                 <div class="kpi anim d4">
                   <p class="kpi-l">Agendas institucionais</p>
-                  <p class="kpi-v"><span data-conta="agendas">7</span></p>
-                  <p class="kpi-d">Feira, plataforma de investimento, portos, zona franca e fábricas.</p>
+                  <p class="kpi-v"><span data-conta="agendas">15</span></p>
+                  <p class="kpi-d">Feira, agências de investimento, consulado, portos, zonas francas e fábricas.</p>
                 </div>
                 <div class="kpi anim d5">
                   <p class="kpi-l">Delegação</p>
-                  <p class="kpi-v">4<small>integrantes</small></p>
-                  <p class="kpi-d">Presidência, chefia de gabinete e as engenharias ambiental e civil.</p>
+                  <p class="kpi-v">2<small>integrantes</small></p>
+                  <p class="kpi-d">A presidente e a engenheira civil da ZPE.</p>
                 </div>
               </div>
             </div>
@@ -5315,7 +5811,7 @@
           <p class="eyebrow anim d1">Missão China · Roteiro</p>
           <h2 class="title anim d2" style="margin:18px 0 10px;font-size:50px">Do Delta do Rio das Pérolas a <strong
               style="font-weight:700">Shenzhen</strong></h2>
-          <p class="lede anim d2" style="font-size:20px;margin-bottom:8px">Todas as agendas na província de Guangdong, no sul da China.</p>
+          <p class="lede anim d2" style="font-size:20px;margin-bottom:8px">Hong Kong e cinco cidades da província de Guangdong, no sul da China.</p>
 
           <div class="body">
             <div class="agd anim d3" id="agenda"></div>
@@ -5324,6 +5820,56 @@
 
         <div class="foot anim d5">
           <span class="foot-note">Roteiro China com o Detalhamento das Visitas recebido durante a viagem. Empresas privadas identificadas pelo setor.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE — HONG KONG
+           As fotos chegaram em 28/10, sem data: o roteiro põe Hong Kong
+           de 10 a 14/10, mas a delegação passou de novo pela cidade na
+           volta. Por isso o slide não traz data.
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="darkmap" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Hong Kong</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">A porta de entrada <strong
+              style="font-weight:700">da missão</strong></h2>
+
+          <div class="body">
+            <div class="hk">
+              <div>
+                <p class="vis-t anim d3">Em Hong Kong, a delegação visitou um <b>terminal internacional de
+                    contêineres</b> de uma das maiores redes portuárias do mundo e foi recebida no <b>Consulado-Geral do
+                    Brasil</b>.</p>
+                <div class="vis-chips anim d4">
+                  <span class="vchip">Terminal de contêineres</span>
+                  <span class="vchip">Consulado-Geral do Brasil</span>
+                </div>
+              </div>
+
+              <div class="hk-fotos">
+                <figure class="ph hk-wide anim d3">
+                  <img src="assets/fotos/hit-hong-kong-grupo.jpg"
+                    alt="A delegação e anfitriões com sacolas da ZPE diante da parede do terminal de contêineres de Hong Kong">
+                  <figcaption>Terminal de contêineres</figcaption>
+                </figure>
+                <figure class="ph hk-alta anim d4">
+                  <img src="assets/fotos/hong-kong-consulado.jpg"
+                    alt="Duas integrantes da delegação no Consulado-Geral do Brasil, diante do brasão da República">
+                  <figcaption>Consulado-Geral do Brasil</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d5">
+          <span class="foot-note">Registros enviados pela delegação.</span>
         </div>
       </section>
 
@@ -5355,18 +5901,26 @@
                 </div>
               </div>
 
-              <div class="vis-fotos">
-                <figure class="ph anim d3">
-                  <img src="assets/fotos/canton-estande-caminhoes.jpg" alt="A delegação com expositora em estande de caminhões">
-                  <figcaption>Caminhões</figcaption>
+              <div class="vis-fotos vf4">
+                <figure class="ph vf-alta anim d3">
+                  <img src="assets/fotos/canton-delegacao-pavilhao.jpg" style="object-position:50% 70%"
+                    alt="A delegação no saguão de um dos pavilhões da Canton Fair">
+                  <figcaption>Delegação na feira</figcaption>
                 </figure>
-                <figure class="ph anim d4">
-                  <img src="assets/fotos/canton-motocicletas-eletricas.jpg" alt="A delegação com expositoras em estande de motocicletas elétricas">
-                  <figcaption>Motocicletas elétricas</figcaption>
+                <figure class="ph vf-alta anim d4">
+                  <img src="assets/fotos/canton-bandeira-maranhao.jpg" style="object-position:50% 60%"
+                    alt="Integrante da delegação e visitante seguram a bandeira do Maranhão no corredor da feira">
+                  <figcaption>A bandeira do Maranhão</figcaption>
                 </figure>
                 <figure class="ph anim d5">
-                  <img src="assets/fotos/canton-energia-renovavel.jpg" alt="Conversa com expositores de energia renovável e armazenamento">
-                  <figcaption>Energia renovável</figcaption>
+                  <img src="assets/fotos/canton-silos-graos.jpg" style="object-position:50% 50%"
+                    alt="Maquete iluminada de silos de grãos num estande de armazenagem">
+                  <figcaption>Armazenagem de grãos</figcaption>
+                </figure>
+                <figure class="ph anim d5">
+                  <img src="assets/fotos/canton-embarcacao.jpg" style="object-position:50% 60%"
+                    alt="Embarcação exposta numa piscina cenográfica em estande da feira">
+                  <figcaption>Embarcações</figcaption>
                 </figure>
               </div>
             </div>
@@ -5409,8 +5963,8 @@
                 </div>
               </div>
               <div class="ns-c anim d5">
-                <figure class="ph"><img src="assets/fotos/zona-franca-fachada.jpg"
-                    alt="A delegação e anfitriões na fachada de um centro de distribuição de comércio eletrônico"></figure>
+                <figure class="ph"><img src="assets/fotos/zona-franca-armazem.jpg" style="object-position:50% 52%"
+                    alt="A delegação e anfitriões de colete percorrem o armazém alfandegado de comércio eletrônico"></figure>
                 <div class="ns-b">
                   <p class="ns-k">Zona Franca Integrada</p>
                   <p class="ns-t">Armazém alfandegado de comércio eletrônico</p>
@@ -5428,6 +5982,77 @@
 
         <div class="foot anim d7">
           <span class="foot-note">Dados do porto e da zona franca: programação oficial da missão. TEU: contêiner-padrão de 20 pés.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE — MURAL DE NANSHA (19 de outubro)
+           Going Global Center, Porto de Nansha e Zona Franca Integrada
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Nansha, Guangzhou · Registro do dia</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Três agendas em <strong
+              style="font-weight:700">um só dia</strong></h2>
+
+          <div class="body">
+            <div class="mural mural-7">
+              <figure class="ph m-hero anim d3">
+                <img src="assets/fotos/going-global-fachada.jpg" style="object-position:50% 60%"
+                  alt="A delegação e anfitriões na fachada do Going Global Center">
+                <figcaption>Going Global Center</figcaption>
+              </figure>
+              <figure class="ph anim d3">
+                <img src="assets/fotos/going-global-delegacao.jpg" style="object-position:40% 50%"
+                  alt="Integrantes da delegação à mesa de reunião no Going Global Center">
+                <figcaption>Going Global Center</figcaption>
+              </figure>
+              <figure class="ph m-wide anim d3">
+                <img src="assets/fotos/going-global-reuniao.jpg" style="object-position:50% 62%"
+                  alt="Visão geral da reunião no Going Global Center, com a apresentação na tela">
+                <figcaption>Reunião no Going Global Center</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/nansha-boas-vindas.jpg" style="object-position:50% 55%"
+                  alt="A delegação e anfitriões no salão de boas-vindas da Fase IV do Porto de Nansha">
+                <figcaption>Porto de Nansha</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/nansha-terraco-grupo.jpg" style="object-position:50% 50%"
+                  alt="A delegação e anfitriões no terraço com vista do Porto de Nansha">
+                <figcaption>Porto de Nansha</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/nansha-mirante.jpg" style="object-position:50% 55%"
+                  alt="Integrante da delegação no mirante com vista do terminal de contêineres de Nansha">
+                <figcaption>Porto de Nansha</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/nansha-janela-terminal.jpg" style="object-position:50% 50%"
+                  alt="Integrante da delegação diante da janela com vista do terminal de contêineres">
+                <figcaption>Porto de Nansha</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/nansha-reuniao.jpg" style="object-position:60% 50%"
+                  alt="Entrega de material na sala de reunião do Porto de Nansha">
+                <figcaption>Porto de Nansha</figcaption>
+              </figure>
+              <figure class="ph anim d6">
+                <img src="assets/fotos/zona-franca-portao.jpg" style="object-position:40% 50%"
+                  alt="Portão da Zona Franca Integrada de Nansha">
+                <figcaption>Zona Franca</figcaption>
+              </figure>
+              <figure class="ph anim d6">
+                <img src="assets/fotos/zona-franca-produtos.jpg" style="object-position:60% 40%"
+                  alt="Integrantes da delegação conferem produtos nas prateleiras do armazém alfandegado">
+                <figcaption>Zona Franca</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Going Global Center, Porto de Nansha (Fase IV) e armazém de comércio eletrônico da Zona Franca Integrada, em 19 de outubro.</span>
         </div>
       </section>
 
@@ -5487,7 +6112,7 @@
                     voltada às Américas.</p>
                 </div>
 
-                <p class="alu-note anim d6">Em <b>Zhongshan</b>, integrantes da delegação visitaram também uma fabricante
+                <p class="alu-note anim d6">Em <b>Zhongshan</b>, a delegação visitou também uma fabricante
                   de louças sanitárias com parque fabril de 200 mil m², que fornece para mais de 150 marcas em mais de 50
                   países.</p>
               </div>
@@ -5501,62 +6126,142 @@
       </section>
 
       <!-- ===================================================
-           SLIDE 9 — MURAL DA VISITA À FABRICANTE DE ALUMÍNIO
+           SLIDE — FOSHAN · REGISTRO DA VISITA
+           As duas fotos da seleção que não cabem no slide do alumínio.
            =================================================== -->
       <section class="slide s-light grain grain-light" data-bloco="Missão China">
         <div class="pad">
           <p class="eyebrow anim d1">Missão China · Foshan · Registro da visita</p>
-          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Da bauxita ao <strong
-              style="font-weight:700">perfil extrudado</strong></h2>
+          <h2 class="title anim d2" style="margin:18px 0 36px;font-size:50px">Da sede à <strong
+              style="font-weight:700">linha de produção</strong></h2>
 
           <div class="body">
-            <div class="mural">
-              <figure class="ph m-hero anim d3">
-                <img src="assets/fotos/aluminio-grupo-sede.jpg" style="object-position:50% 72%"
-                  alt="A delegação da ZPE e anfitriões no saguão da sede da fabricante">
-                <figcaption>Delegação e anfitriões na sede</figcaption>
+            <div class="mreg" style="height:560px">
+              <figure class="ph r-34 anim d3">
+                <img src="assets/fotos/aluminio-sede-fachada.jpg"
+                  alt="Fachada da sede da fabricante de perfis de alumínio, em Foshan">
+                <figcaption>Sede da fabricante</figcaption>
               </figure>
-              <figure class="ph m-wide anim d3">
-                <img src="assets/fotos/aluminio-showroom-cadeia.jpg"
-                  alt="Vitrine do showroom com a cadeia do alumínio, da bauxita ao lingote">
-                <figcaption>Showroom: a cadeia do alumínio</figcaption>
-              </figure>
-              <figure class="ph anim d4">
-                <img src="assets/fotos/aluminio-bauxita.jpg" style="object-position:50% 55%"
-                  alt="Amostra de bauxita no showroom">
-                <figcaption>Bauxita</figcaption>
-              </figure>
-              <figure class="ph anim d4">
-                <img src="assets/fotos/aluminio-barras-extrudadas.jpg" style="object-position:50% 60%"
-                  alt="Barras de alumínio extrudadas no showroom">
-                <figcaption>Barras extrudadas</figcaption>
-              </figure>
-              <figure class="ph anim d5">
-                <img src="assets/fotos/aluminio-fabrica.jpg" style="object-position:50% 62%"
+              <figure class="ph r-34 anim d4">
+                <img src="assets/fotos/aluminio-fabrica.jpg"
                   alt="Integrante da delegação de capacete na linha de produção, com perfis pendurados ao fundo">
                 <figcaption>Linha de produção</figcaption>
-              </figure>
-              <figure class="ph anim d5">
-                <img src="assets/fotos/aluminio-carro.jpg" style="object-position:50% 50%"
-                  alt="Integrante da delegação ao lado de um carro com estrutura toda em alumínio">
-                <figcaption>Estrutura de carro em alumínio</figcaption>
-              </figure>
-              <figure class="ph anim d6">
-                <img src="assets/fotos/aluminio-visita-fabrica.jpg" style="object-position:50% 40%"
-                  alt="Duas integrantes da delegação de capacete na fábrica">
-                <figcaption>Visita à fábrica</figcaption>
-              </figure>
-              <figure class="ph anim d6">
-                <img src="assets/fotos/aluminio-mapa-america-do-sul.jpg" style="object-position:50% 45%"
-                  alt="Mapa luminoso da América do Sul com as cidades atendidas pela fabricante">
-                <figcaption>América do Sul</figcaption>
               </figure>
             </div>
           </div>
         </div>
 
-        <div class="foot anim d7">
-          <span class="foot-note">Showroom e linha de produção da fabricante de perfis de alumínio, em 20 de outubro.</span>
+        <div class="foot anim d5">
+          <span class="foot-note">Fabricante de perfis de alumínio, em 20 de outubro.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE — ZHUHAI · PORTO DE GAOLAN E ZONA FRANCA (21/10, tarde)
+           A reunião (fotos da mesa e da sala) entrou aqui pela fala da
+           presidente ("na ZPE da China"); o INDICE da cobertura lembra que
+           o CECPS foi no mesmo dia, com as mesmas roupas.
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Zhuhai · Porto de Gaolan e Zona Franca · 21 de outubro</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Um porto com <strong
+              style="font-weight:700">rota direta para o Brasil</strong></h2>
+
+          <div class="body">
+            <div class="mural mural-szm">
+              <figure class="ph m-hero anim d3">
+                <img src="assets/fotos/gaolan-mirante-mapa.jpg" style="object-position:50% 45%"
+                  alt="A presidente, de capacete, aponta a área portuária no mapa de satélite da zona de desenvolvimento de Zhuhai, no mirante à beira-mar">
+                <figcaption>Mirante: a zona portuária no mapa</figcaption>
+              </figure>
+              <figure class="ph m-alta anim d4">
+                <img src="assets/fotos/gaolan-zona-franca-portao.jpg" style="object-position:35% 50%"
+                  alt="Portão da Zona Franca Integrada do Porto de Gaolan, com as cancelas de controle de acesso">
+                <figcaption>Zona Franca Integrada</figcaption>
+              </figure>
+              <figure class="ph m-alta anim d4">
+                <img src="assets/fotos/gaolan-janela.jpg" style="object-position:45% 50%"
+                  alt="Anfitriã aponta a paisagem pela janela para a presidente e um anfitrião">
+                <figcaption>Vista da área</figcaption>
+              </figure>
+              <figure class="ph m-wide anim d5">
+                <img src="assets/fotos/gaolan-reuniao-sala.jpg" style="object-position:50% 55%"
+                  alt="Sala de reunião com a apresentação da ZPE no projetor, delegação e anfitriões à mesa">
+                <figcaption>Reunião de apresentação</figcaption>
+              </figure>
+              <figure class="ph m-wide anim d5">
+                <img src="assets/fotos/gaolan-reuniao-mesa.jpg" style="object-position:50% 60%"
+                  alt="A delegação à mesa da reunião de apresentação, com plaquinhas de nome">
+                <figcaption>A delegação na reunião</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Na foz do Rio das Pérolas, o Porto de Gaolan movimenta mais de 100 milhões de toneladas por ano. Dados: programação oficial da missão.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE — HENGQIN · CECPS
+           Uma foto só (a única recebida). Se chegarem mais, o slide pode
+           voltar a ter um mural pequeno na coluna da direita.
+           =================================================== -->
+      <section class="slide s-dark grain" data-bloco="Missão China">
+        <div class="darkmap" aria-hidden="true">
+          <span class="dm-base"><img src="assets/images/world_dotted_raster.png" alt="" loading="lazy"></span>
+          <span class="dm-glow dm-glow-a"></span>
+          <span class="dm-glow dm-glow-b"></span>
+        </div>
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Hengqin, Zhuhai · CECPS</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Um balcão único entre a China e <strong
+              style="font-weight:700">os países lusófonos</strong></h2>
+
+          <div class="body">
+            <div class="cec">
+              <div>
+                <p class="cec-lede anim d3">O <b>Centro de Serviços Económicos e Comerciais entre a China e os Países de
+                    Língua Portuguesa e Espanhola</b> foi criado em abril de 2025 pelo Governo de Macau e pela Zona de
+                  Cooperação Aprofundada Guangdong-Macau. Orienta empresas chinesas que vão investir nesses países e
+                  empresas deles que querem entrar na China.</p>
+
+                <div class="cec-k anim d4">
+                  <div class="kpi">
+                    <p class="kpi-v">300<em>+</em></p>
+                    <p class="kpi-d">empresas atendidas no primeiro ano</p>
+                  </div>
+                  <div class="kpi">
+                    <p class="kpi-v">40<em>+</em></p>
+                    <p class="kpi-d">memorandos de cooperação assinados</p>
+                  </div>
+                  <div class="kpi">
+                    <p class="kpi-v">16</p>
+                    <p class="kpi-d">acordos estratégicos com empresas em julho de 2026</p>
+                  </div>
+                </div>
+
+                <div class="cec-call anim d5">
+                  <p class="cec-call-k">Por que importa para a ZPE</p>
+                  <p class="cec-call-t">O centro tem <b>escritório permanente no Brasil</b> e levou empresas chinesas a
+                    São Paulo e ao Rio em junho de 2026. É um canal direto para apresentar Bacabeira a quem já decidiu
+                    investir no país.</p>
+                </div>
+              </div>
+
+              <figure class="ph cec-foto anim d4">
+                <img src="assets/fotos/cecps-grupo.jpg"
+                  alt="A delegação da ZPE e anfitriões diante do letreiro do centro de serviços entre a China e os países de língua portuguesa e espanhola, em Hengqin">
+                <figcaption>Delegação no CECPS, em Hengqin</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">CECPS: Governo de Macau e Xinhua (jul. 2026), Macau Post Daily (abr. 2026) e Macau Business (jun. 2026).</span>
         </div>
       </section>
 
@@ -5619,6 +6324,53 @@
       </section>
 
       <!-- ===================================================
+           SLIDE — MURAL DE SHENZHEN (22 de outubro)
+           Manhã na operadora logística (CNS Intertrans, citada pelo
+           setor), tarde no Porto de Mawan.
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Missão China">
+        <div class="pad">
+          <p class="eyebrow anim d1">Missão China · Shenzhen · 22 de outubro · Registro do dia</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Logística de projeto pela manhã, <strong
+              style="font-weight:700">porto inteligente à tarde</strong></h2>
+
+          <div class="body">
+            <div class="mural mural-szm">
+              <figure class="ph m-hero4 anim d3">
+                <img src="assets/fotos/cns-grupo.jpg" style="object-position:50% 70%"
+                  alt="A delegação da ZPE e a equipe da operadora logística diante do telão da reunião; a presidente e uma anfitriã seguram a revista da ZPE">
+                <figcaption>Operadora logística de cargas de projeto</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/cns-apresentacao-zpe.jpg" style="object-position:50% 30%"
+                  alt="Integrante da delegação apresenta a ZPE Maranhão ao lado da tela, na sala da operadora logística">
+                <figcaption>A ZPE apresentada à operadora</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/mawan-sala-controle.jpg" style="object-position:40% 50%"
+                  alt="Operadores nas estações de comando remoto da sala de controle do Porto de Mawan">
+                <figcaption>Mawan: comando remoto</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/mawan-sala-controle-conversa.jpg" style="object-position:50% 40%"
+                  alt="A presidente conversa com anfitrião junto ao vidro da sala de controle do Porto de Mawan">
+                <figcaption>Porto de Mawan</figcaption>
+              </figure>
+              <figure class="ph anim d5">
+                <img src="assets/fotos/mawan-saguao-delegacao.jpg" style="object-position:55% 55%"
+                  alt="A delegação no saguão do centro de operações do Porto de Mawan">
+                <figcaption>Porto de Mawan</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d6">
+          <span class="foot-note">Pela manhã, a operadora apresentou o comércio entre a China e o Brasil, e a ZPE apresentou Bacabeira. Empresas privadas identificadas pelo setor.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
            SLIDE 10 — SÍNTESE DA MISSÃO
            =================================================== -->
       <section class="slide s-light grain grain-light" data-bloco="Missão China">
@@ -5637,9 +6389,9 @@
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />
                   </svg></span>
-                <p class="leg-t">Canal com uma plataforma oficial</p>
-                <p class="leg-d">O Going Global Center conhece Bacabeira e acompanha empresas chinesas que investem no
-                  exterior.</p>
+                <p class="leg-t">Canal com agências de investimento</p>
+                <p class="leg-d">O Going Global Center e o CECPS, que tem escritório no Brasil, conhecem Bacabeira e
+                  acompanham empresas chinesas que investem no exterior.</p>
               </div>
               <div class="leg-c anim d4">
                 <span class="leg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -5700,7 +6452,7 @@
           <span class="dm-glow dm-glow-b"></span>
         </div>
         <div class="pad">
-          <p class="eyebrow anim d1">Item II · Celebração de parcerias</p>
+          <p class="eyebrow anim d1">Item II · Celebração de parcerias · Projeto H2X</p>
           <h2 class="title anim d2" style="margin:18px 0 34px;font-size:50px">CDRU assinada com a <strong
               style="font-weight:700">NexSolar</strong></h2>
 
@@ -5712,12 +6464,20 @@
                        data-src-webm="assets/videos/video_card_web.webm"
                        data-src-mp4="assets/videos/video_card_web.mp4"></video>
                 <p class="hero-l">Assinatura</p>
-                <p class="hero-big">23<small>de outubro</small></p>
-                <p class="hero-d">Contrato de concessão de direito real de uso assinado pela presidente da ZPE,
-                  Rakel Murad.</p>
+                <p class="hero-big">16<small>de outubro</small></p>
+                <p class="hero-d">Concessão de direito real de uso do lote <span style="white-space:nowrap">LT-ZPE-001</span>, assinada pela presidente da
+                  ZPE, Rakel Murad.</p>
                 <div class="hero-split">
                   <div>
-                    <p class="hero-s-v">1</p>
+                    <p class="hero-s-v">60 ha</p>
+                    <p class="hero-s-l">Área cedida<br>600 mil m²</p>
+                  </div>
+                  <div>
+                    <p class="hero-s-v">20 anos</p>
+                    <p class="hero-s-l">De concessão,<br>renováveis</p>
+                  </div>
+                  <div>
+                    <p class="hero-s-v">1ª</p>
                     <p class="hero-s-l">Empresa com área<br>cedida na ZPE</p>
                   </div>
                 </div>
@@ -5725,17 +6485,19 @@
 
               <div class="fic">
                 <div class="fic-r anim d3">
+                  <span class="fic-k">Concessionária</span>
+                  <p class="fic-v"><b>NexSolar</b>
+                    <small>Empresa do projeto H2X, aprovado pelo CZPE.</small></p>
+                </div>
+                <div class="fic-r anim d4">
+                  <span class="fic-k">Uso</span>
+                  <p class="fic-v">Fábrica de e-metanol e hidrogênio verde
+                    <small>Lote LT-ZPE-001, com 600 mil m².</small></p>
+                </div>
+                <div class="fic-r anim d4">
                   <span class="fic-k">Instrumento</span>
                   <p class="fic-v">Concessão de direito real de uso <b>(CDRU)</b>
-                    <small>Outorga de área da ZPE prevista na Política de Alocação de Área.</small></p>
-                </div>
-                <div class="fic-r anim d4">
-                  <span class="fic-k">Concessionária</span>
-                  <p class="fic-v"><b>NexSolar</b></p>
-                </div>
-                <div class="fic-r anim d4">
-                  <span class="fic-k">Concedente</span>
-                  <p class="fic-v">ZPE Maranhão</p>
+                    <small>Política de Alocação de Área. Valores reajustados pelo IPCA todo ano.</small></p>
                 </div>
                 <div class="call anim d5">
                   <p class="call-l">O que muda</p>
@@ -5749,6 +6511,59 @@
 
         <div class="foot anim d6">
           <span class="foot-note">Estatuto Social, Art. 3º, V, e Política de Alocação de Área: matérias da reunião extraordinária de 18 de setembro de 2026.</span>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           SLIDE — CDRU · COMO A ZPE RECEBE
+           Fonte: contrato (cláusulas 1, 4 e 5) e fontes/Projecao_Receita_ZPE_H2X.xlsx.
+           R$ 71 mi = R$ 330 mil × 215 meses (nov/2028 a set/2046), sem IPCA.
+           =================================================== -->
+      <section class="slide s-light grain grain-light" data-bloco="Parcerias">
+        <div class="pad">
+          <p class="eyebrow anim d1">Item II · CDRU com a NexSolar · Remuneração</p>
+          <h2 class="title anim d2" style="margin:18px 0 30px;font-size:50px">Como a ZPE recebe <strong
+              style="font-weight:700">pela área cedida</strong></h2>
+
+          <div class="body">
+            <div class="rcb">
+              <div class="rcb-f anim d3">
+                <p class="rcb-n">Fase 1 · Carência</p>
+                <p class="rcb-v">R$ 0</p>
+                <p class="rcb-p">Da assinatura até a planta operar, com limite de 24 meses (out/2028).</p>
+              </div>
+              <div class="rcb-f rcb-cond anim d4">
+                <p class="rcb-n">Fase 2 · Só se a obra atrasar</p>
+                <p class="rcb-v">R$ 102 mil<small>/mês</small></p>
+                <p class="rcb-p">Do fim da carência até a operação começar. R$ 0,17/m², cerca de 31% da taxa cheia.</p>
+              </div>
+              <div class="rcb-f rcb-cheia anim d5">
+                <p class="rcb-n">Fase 3 · Taxa cheia</p>
+                <p class="rcb-v">R$ 330 mil<small>/mês</small></p>
+                <p class="rcb-p">Do mês seguinte ao início da operação até o fim do contrato. R$ 0,55/m², valor de
+                  indústria da tabela da ZPE.</p>
+              </div>
+            </div>
+
+            <div class="rcb-b">
+              <div class="rcb-tot anim d5">
+                <p class="rcb-tot-v">≈ R$ 71<small>milhões</small></p>
+                <p class="rcb-tot-d">em cerca de 18 anos de taxa cheia, se a operação começar em out/2028. Valor
+                  nominal, <b>mais o IPCA</b>, sem percentual sobre faturamento.</p>
+              </div>
+              <div class="rcb-svc anim d6">
+                <p class="rcb-svc-k">Receita adicional · a contratar</p>
+                <p class="rcb-svc-t">Serviços de carga da tabela da ZPE: trânsito de granel líquido, armazenagem,
+                  pesagem e conferência.</p>
+                <p class="rcb-svc-d">Para projetar: aditivo que vincule a empresa à tabela e volumes previstos de
+                  e-metanol.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot anim d7">
+          <span class="foot-note">Contrato de CDRU do lote LT-ZPE-001, cláusulas 1, 4 e 5, e Tabela de Preços da ZPE. Estimativa sem reajuste: R$ 330 mil × 215 meses.</span>
         </div>
       </section>
 
@@ -5895,7 +6710,7 @@
 
           <div class="end-k end-k5">
             <div class="anim d3">
-              <p class="end-k-v" data-conta="agendas">7</p>
+              <p class="end-k-v" data-conta="agendas">15</p>
               <p class="end-k-d">Agendas institucionais na Missão China</p>
             </div>
             <div class="anim d3">
@@ -5978,6 +6793,23 @@
     <div class="idx-grid" id="idxGrid"></div>
   </div>
 
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada" aria-hidden="true">
+    <span class="lb-n" id="lbN"></span>
+    <figure class="lb-f">
+      <img id="lbImg" alt="">
+      <figcaption class="lb-cap"><b id="lbK"></b><span id="lbT"></span></figcaption>
+    </figure>
+    <button class="lb-b lb-x" id="lbX" aria-label="Fechar foto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+    </button>
+    <button class="lb-b lb-p" id="lbP" aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+    </button>
+    <button class="lb-b lb-s" id="lbS" aria-label="Próxima foto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
+  </div>
+
   <div class="hud" id="hud">
     <span class="hud-bloco" id="hudBloco"></span>
     <div class="hud-dots" id="hudDots"></div>
@@ -6014,28 +6846,26 @@
     /* =========================================================
        AGENDA DA MISSÃO CHINA — fonte única de verdade
        Monta o slide de roteiro e alimenta as contagens ([data-conta]).
-       Base: ROTEIRO_CONSOLIDADO.md da cobertura (atualizado em 22/10).
+       Base: ROTEIRO_CONSOLIDADO.md da cobertura (atualizado em 28/10).
+       via: true = deslocamento (card ou item); não conta como agenda.
        ok: false = agenda prevista sem confirmação da delegação. Fica
        fora do slide e das contagens; ao confirmar, troque para true.
        Empresas privadas aparecem pelo setor (orientação da presidente).
        ========================================================= */
     const AGENDA = [
       {
-        d: '10 a 14 out', c: 'Viagem de ida', via: true, itens: [
-          { t: 'São Luís, São Paulo, Doha e Hong Kong', ok: true },
-          { t: 'Trem-bala de Hong Kong a Guangzhou', ok: true }
+        d: '10 a 14 out', c: 'Hong Kong', itens: [
+          { t: 'Terminal internacional de contêineres', cidade: 'Hong Kong', ok: true },
+          { t: 'Consulado-Geral do Brasil', cidade: 'Hong Kong', ok: true },
+          { t: 'Ida por São Paulo e Doha; trem-bala a Guangzhou', via: true, ok: true }
         ]
       },
       {
         d: '15 a 19 out', c: 'Guangzhou', itens: [
-          { t: 'Canton Fair, Fase 1: reuniões com expositores', cidade: 'Guangzhou', ok: true }
-        ]
-      },
-      {
-        d: '19 out', c: 'Nansha, Guangzhou', itens: [
+          { t: 'Canton Fair, Fase 1: reuniões com expositores', cidade: 'Guangzhou', ok: true },
           { t: 'Going Global Center, plataforma oficial de investimento', cidade: 'Guangzhou', ok: true },
           { t: 'Porto de Nansha, terminal automatizado', cidade: 'Guangzhou', ok: true },
-          { t: 'Centro de e-commerce na Zona Franca Integrada', cidade: 'Guangzhou', ok: true }
+          { t: 'Centro de e-commerce na Zona Franca de Nansha', cidade: 'Guangzhou', ok: true }
         ]
       },
       {
@@ -6046,16 +6876,17 @@
       },
       {
         d: '21 out', c: 'Zhuhai', itens: [
-          { t: 'Fabricante de ar-condicionado', cidade: 'Zhuhai', ok: false },
-          { t: 'Porto de Gaolan e Zona Franca', cidade: 'Zhuhai', ok: false }
+          { t: 'Fabricante de ar-condicionado', cidade: 'Zhuhai', ok: true },
+          { t: 'Porto de Gaolan e Zona Franca', cidade: 'Zhuhai', ok: true },
+          { t: 'CECPS, centro de negócios com os países lusófonos, em Hengqin', cidade: 'Zhuhai', ok: true }
         ]
       },
       {
         c: 'Shenzhen', itens: [
-          { t: 'Operadora logística de cargas de projeto', dia: '22', cidade: 'Shenzhen', ok: false },
+          { t: 'Operadora logística de cargas de projeto', dia: '22', cidade: 'Shenzhen', ok: true },
           { t: 'Porto inteligente de Mawan', dia: '22', cidade: 'Shenzhen', ok: true },
-          { t: 'Porto de Yantian, com linha regular para o Brasil', dia: '23', cidade: 'Shenzhen', ok: false },
-          { t: 'Fabricante de robôs humanoides', dia: '23', cidade: 'Shenzhen', ok: false }
+          { t: 'Porto de Yantian, com linha regular para o Brasil', dia: '23', cidade: 'Shenzhen', ok: true },
+          { t: 'Fabricante de robôs humanoides', dia: '23', cidade: 'Shenzhen', ok: true }
         ]
       },
       {
@@ -6072,7 +6903,7 @@
       .map(p => ({ ...p, itens: p.itens.filter(i => i.ok) }))
       .filter(p => p.itens.length);
 
-    const realizadas = paradas.filter(p => !p.via).flatMap(p => p.itens);
+    const realizadas = paradas.filter(p => !p.via).flatMap(p => p.itens).filter(i => !i.via);
     const cidades = [...new Set(realizadas.map(i => i.cidade).filter(Boolean))];
 
     const CONTA = {
@@ -6090,13 +6921,13 @@
         return '<div class="agd-s' + (p.via ? ' via' : '') + '">'
           + '<p class="agd-d">' + esc(data) + '</p>'
           + '<p class="agd-c">' + esc(p.c) + '</p>'
-          + '<ul class="agd-l">' + p.itens.map(i => '<li>' + esc(i.t) + '</li>').join('') + '</ul>'
+          + '<ul class="agd-l">' + p.itens.map(i => '<li' + (i.via ? ' class="via"' : '') + '>' + esc(i.t) + '</li>').join('') + '</ul>'
           + '</div>';
       }).join('');
     })();
 
     // Preenche os números dos slides a partir da AGENDA. O valor escrito
-    // no HTML é só fallback (posição com as agendas confirmadas em 22/10).
+    // no HTML é só fallback (posição com as agendas confirmadas em 28/10).
     document.querySelectorAll('[data-conta]').forEach(el => {
       const n = CONTA[el.dataset.conta];
       if (n === undefined) { console.warn('[conta] chave desconhecida:', el.dataset.conta); return; }
@@ -6113,9 +6944,10 @@
     const TITULOS = [
       'Capa', 'Pauta da apresentação',
       'Missão China', 'Missão: objetivos e números', 'Missão: roteiro',
-      'Canton Fair', 'Nansha: investimento, porto e zona franca', 'Foshan: fabricante de alumínio', 'Foshan: registro da visita',
-      'Shenzhen: Porto de Mawan', 'Missão: resultados',
-      'CDRU com a NexSolar',
+      'Hong Kong', 'Canton Fair', 'Nansha: investimento, porto e zona franca', 'Nansha: registro do dia',
+      'Foshan: fabricante de alumínio', 'Foshan: registro da visita', 'Zhuhai: Porto de Gaolan', 'Hengqin: CECPS',
+      'Shenzhen: Porto de Mawan', 'Shenzhen: registro do dia', 'Missão: resultados',
+      'CDRU com a NexSolar', 'CDRU: como a ZPE recebe',
       'Implantação e projetos no CZPE', 'Comprovação de 10% ao CZPE', 'Carteira de projetos',
       'Encerramento'
     ];
@@ -6337,9 +7169,55 @@
     document.getElementById('btnFs').addEventListener('click', e => { e.stopPropagation(); toggleFs(); });
 
     /* =========================================================
+       FOTO AMPLIADA
+       Percorre só as fotos do slide em que a foto foi clicada.
+       Legenda: a do slide (ou o rótulo do card) + o texto alternativo.
+       ========================================================= */
+    const lb = document.getElementById('lb');
+    const lbImg = document.getElementById('lbImg');
+    let lbFotos = [], lbI = 0;
+
+    function lbMostra(i) {
+      lbI = (i + lbFotos.length) % lbFotos.length;
+      const img = lbFotos[lbI];
+      const fig = img.closest('.ph');
+      const rotulo = fig.querySelector('figcaption') || fig.closest('.ns-c')?.querySelector('.ns-k');
+      lbImg.src = img.currentSrc || img.src;
+      lbImg.alt = img.alt;
+      document.getElementById('lbK').textContent = rotulo ? rotulo.textContent.trim() : '';
+      document.getElementById('lbT').textContent = img.alt;
+      document.getElementById('lbN').textContent = (lbI + 1) + ' / ' + lbFotos.length;
+    }
+    function openLb(img) {
+      lbFotos = [...img.closest('.slide').querySelectorAll('.ph:not(.ph-vazio) img')];
+      lb.classList.toggle('so', lbFotos.length < 2);
+      lbMostra(lbFotos.indexOf(img));
+      lb.classList.add('on');
+      lb.setAttribute('aria-hidden', 'false');
+    }
+    function closeLb() {
+      lb.classList.remove('on');
+      lb.setAttribute('aria-hidden', 'true');
+    }
+    const lbAberto = () => lb.classList.contains('on');
+    lb.addEventListener('click', e => { if (!e.target.closest('.lb-b')) closeLb(); });
+    document.getElementById('lbX').addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+    document.getElementById('lbP').addEventListener('click', e => { e.stopPropagation(); lbMostra(lbI - 1); });
+    document.getElementById('lbS').addEventListener('click', e => { e.stopPropagation(); lbMostra(lbI + 1); });
+
+    /* =========================================================
        TECLADO
        ========================================================= */
     document.addEventListener('keydown', e => {
+      if (lbAberto()) {
+        switch (e.key) {
+          case 'Escape': e.preventDefault(); closeLb(); break;
+          case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); lbMostra(lbI + 1); break;
+          case 'ArrowLeft': case 'PageUp': e.preventDefault(); lbMostra(lbI - 1); break;
+          case 'f': case 'F': toggleFs(); break;
+        }
+        return;
+      }
       if (idx.classList.contains('on')) {
         if (e.key === 'Escape' || e.key === 'g' || e.key === 'G') { e.preventDefault(); closeIdx(); }
         return;
@@ -6361,6 +7239,8 @@
        ========================================================= */
     viewport.addEventListener('click', e => {
       if (e.target.closest('button, a')) return;
+      const foto = e.target.closest('.ph:not(.ph-vazio)');
+      if (foto && foto.querySelector('img')) { openLb(foto.querySelector('img')); return; }
       if (e.clientX > window.innerWidth / 2) next(); else prev();
     });
     document.getElementById('tPrev').addEventListener('click', e => { e.stopPropagation(); prev(); });
@@ -6374,7 +7254,10 @@
     document.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - tsx;
       const dy = e.changedTouches[0].clientY - tsy;
-      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) { dx < 0 ? next() : prev(); }
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) {
+        if (lbAberto()) lbMostra(lbI + (dx < 0 ? 1 : -1));
+        else dx < 0 ? next() : prev();
+      }
     }, { passive: true });
 
     /* =========================================================
