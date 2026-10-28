@@ -4820,7 +4820,7 @@
     }
 
     /* ===========================================================
-       HENGQIN — CECPS: texto, números e foto
+       HENGQIN — CECPS: texto, números e fotos
        =========================================================== */
     .cec {
       display: grid;
@@ -4881,9 +4881,25 @@
       color: #fff;
     }
 
-    /* Foto de grupo deitada (3:2), no formato original */
-    .cec-foto {
-      aspect-ratio: 3 / 2;
+    /* Mural do CECPS: a foto de grupo deitada em cima, três em pé (3:4) embaixo */
+    .cec-mural {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 290px 290px;
+      gap: 16px;
+    }
+
+    .cec-mural .ph {
+      height: 100%;
+    }
+
+    .cec-mural .cec-top {
+      grid-column: span 3;
+    }
+
+    .cec-mural figcaption {
+      padding: 36px 14px 12px;
+      font-size: 11px;
     }
 
     /* Espaço reservado para foto ainda não recebida */
@@ -5425,6 +5441,23 @@
     .mural .m-hero4 {
       grid-column: span 4;
       grid-row: span 2;
+    }
+
+    /* Shenzhen: 9 colunas. A foto de grupo (16:9) ocupa 6×2 e as seis
+       em pé ficam em 3×2 à direita (CNS em cima, Mawan embaixo). */
+    .mural.mural-9 {
+      grid-template-columns: repeat(9, 1fr);
+      grid-template-rows: repeat(2, 290px);
+    }
+
+    .mural .m-hero6 {
+      grid-column: span 6;
+      grid-row: span 2;
+    }
+
+    .mural-9 figcaption {
+      padding: 36px 12px 12px;
+      font-size: 10.5px;
     }
 
     /* Coluna alta (1×2), para foto em pé estreita */
@@ -6206,8 +6239,7 @@
 
       <!-- ===================================================
            SLIDE — HENGQIN · CECPS
-           Uma foto só (a única recebida). Se chegarem mais, o slide pode
-           voltar a ter um mural pequeno na coluna da direita.
+           Quatro fotos da seleção num mural pequeno na coluna da direita.
            =================================================== -->
       <section class="slide s-dark grain" data-bloco="Missão China">
         <div class="darkmap" aria-hidden="true">
@@ -6251,11 +6283,28 @@
                 </div>
               </div>
 
-              <figure class="ph cec-foto anim d4">
-                <img src="assets/fotos/cecps-grupo.jpg"
-                  alt="A delegação da ZPE e anfitriões diante do letreiro do centro de serviços entre a China e os países de língua portuguesa e espanhola, em Hengqin">
-                <figcaption>Delegação no CECPS, em Hengqin</figcaption>
-              </figure>
+              <div class="cec-mural">
+                <figure class="ph cec-top anim d4">
+                  <img src="assets/fotos/cecps-grupo.jpg" style="object-position:50% 72%"
+                    alt="A delegação da ZPE e anfitriões diante do letreiro do centro de serviços entre a China e os países de língua portuguesa e espanhola, em Hengqin">
+                  <figcaption>Delegação no CECPS, em Hengqin</figcaption>
+                </figure>
+                <figure class="ph anim d5">
+                  <img src="assets/fotos/cecps-parceiros.jpg" style="object-position:30% 50%"
+                    alt="Anfitriã apresenta o painel de parceiros do centro, em chinês, inglês e português">
+                  <figcaption>Parceiros do centro</figcaption>
+                </figure>
+                <figure class="ph anim d5">
+                  <img src="assets/fotos/cecps-recepcao.jpg" style="object-position:50% 50%"
+                    alt="Recepção do CECPS, com o letreiro trilíngue do centro">
+                  <figcaption>Recepção</figcaption>
+                </figure>
+                <figure class="ph anim d6">
+                  <img src="assets/fotos/cecps-grupo-letreiro.jpg" style="object-position:50% 50%"
+                    alt="A delegação e anfitriões diante do letreiro do CECPS, na recepção">
+                  <figcaption>Delegação e anfitriões</figcaption>
+                </figure>
+              </div>
             </div>
           </div>
         </div>
@@ -6335,8 +6384,8 @@
               style="font-weight:700">porto inteligente à tarde</strong></h2>
 
           <div class="body">
-            <div class="mural mural-szm">
-              <figure class="ph m-hero4 anim d3">
+            <div class="mural mural-9">
+              <figure class="ph m-hero6 anim d3">
                 <img src="assets/fotos/cns-grupo.jpg" style="object-position:50% 70%"
                   alt="A delegação da ZPE e a equipe da operadora logística diante do telão da reunião; a presidente e uma anfitriã seguram a revista da ZPE">
                 <figcaption>Operadora logística de cargas de projeto</figcaption>
@@ -6344,9 +6393,19 @@
               <figure class="ph anim d4">
                 <img src="assets/fotos/cns-apresentacao-zpe.jpg" style="object-position:50% 30%"
                   alt="Integrante da delegação apresenta a ZPE Maranhão ao lado da tela, na sala da operadora logística">
-                <figcaption>A ZPE apresentada à operadora</figcaption>
+                <figcaption>Apresentação da ZPE</figcaption>
               </figure>
               <figure class="ph anim d4">
+                <img src="assets/fotos/cns-presidente-apresenta.jpg" style="object-position:50% 25%"
+                  alt="A presidente apresenta a ZPE Maranhão de pé, ao lado do púlpito, na sala da operadora logística">
+                <figcaption>A presidente apresenta</figcaption>
+              </figure>
+              <figure class="ph anim d4">
+                <img src="assets/fotos/cns-presidente-letreiro.jpg" style="object-position:50% 55%"
+                  alt="A presidente diante do letreiro da operadora logística, na recepção">
+                <figcaption>Operadora logística</figcaption>
+              </figure>
+              <figure class="ph anim d5">
                 <img src="assets/fotos/mawan-sala-controle.jpg" style="object-position:40% 50%"
                   alt="Operadores nas estações de comando remoto da sala de controle do Porto de Mawan">
                 <figcaption>Mawan: comando remoto</figcaption>
